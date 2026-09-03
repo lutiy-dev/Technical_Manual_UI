@@ -1,0 +1,29 @@
+﻿node ID,title,current value,possible modes,exact effect,status
+168,1=SDXL/ 2=SDXL+IPA,[1],See title/type; widget may accept further numeric values,1 plain SDXL; 2 SDXL+IPAdapter,CONFIRMED
+453,SWITCH 1=GLOBAL Prompt / 2= Florence2,[1],See title/type; widget may accept further numeric values,1 GLOBAL prompt; 2 Florence2 caption,CONFIRMED
+456,SWITCH CNET: 1=EXTRA / 2=PREPROCESS,[1],See title/type; widget may accept further numeric values,1 external maps; 2 preprocessors,CONFIRMED
+459,PPL Switch 1=FLUX / 2=3D,[1],See title/type; widget may accept further numeric values,Selects FLUX or 3D PPL composite input,CONFIRMED; widget overridden by linked Input
+479,Fast Groups Bypasser (rgthree),null,See title/type; widget may accept further numeric values,UI group bypass controller; exact saved toggles absent,CONFIRMED
+522,People Input Switch 1=FLUX / 2=3D rendered,[1],See title/type; widget may accept further numeric values,Selects FLUX-generated or 3D people crop,CONFIRMED; widget overridden by linked Input
+535,CR Latent Input Switch,[1],See title/type; widget may accept further numeric values,Selects empty or VAE-encoded SDXL latent,CONFIRMED; widget overridden by linked Input
+541,1=TXT+CNET2IMG / 2=IMG+CNET2IMG,[1],See title/type; widget may accept further numeric values,1 txt2img; 2 img2img,CONFIRMED
+543,SWITCH PPL: 1=FLUX / 2=INPUT,[1],See title/type; widget may accept further numeric values,Shared PPL selector: 1 FLUX; 2 input/3D,CONFIRMED
+552,People Input Switch 1=FLUX / 2=3D rendered,[1],See title/type; widget may accept further numeric values,Selects FLUX or 3D people for inpaint preparation,CONFIRMED; widget overridden by linked Input
+592,CR Image Input Switch,[1],See title/type; widget may accept further numeric values,Selects resized or original main image,CONFIRMED; widget overridden by linked Input
+600,If ANY return A else B-🔬,null,See title/type; widget may accept further numeric values,Selects denoise from comparison,CONFIRMED
+602,Compare-🔬,"[""a != b""]",See title/type; widget may accept further numeric values,Generation-mode comparison,CONFIRMED
+607,Float-🔬,[1],See title/type; widget may accept further numeric values,Fallback denoise 1.0,CONFIRMED
+608,DENOISE (ONLY IF GENERATION=2),[0.3],See title/type; widget may accept further numeric values,Img2img denoise,CONFIRMED
+609,Int-🔬,[1],See title/type; widget may accept further numeric values,Comparison constant 1,CONFIRMED
+630,IPA-INPUT IMG: 1=FIRST/ 2=BOTH,[1],See title/type; widget may accept further numeric values,First or batched IPA references,CONFIRMED
+685,CR Image Input Switch,[1],See title/type; widget may accept further numeric values,Selects resized or original people composite,CONFIRMED; widget overridden by linked Input
+693,1=RESIZE INPUT / 2=ORIGINAL INPUT,[1],See title/type; widget may accept further numeric values,1 resized input; 2 original,CONFIRMED
+695,CR Image Input Switch,[1],See title/type; widget may accept further numeric values,Selects resized or original base,CONFIRMED; widget overridden by linked Input
+702,RESIZE TO,[1536],See title/type; widget may accept further numeric values,Working resolution,CONFIRMED
+715,People Input Switch 1=FLUX / 2=3D rendered,[2],See title/type; widget may accept further numeric values,Final people source switch,CONFIRMED; widget overridden by linked Input
+717,COLOR FROM ENVIRONMENT STRENGHT,[0.44],See title/type; widget may accept further numeric values,Color-match strength,CONFIRMED
+720,STAGE 1 & 2 STRENGTH,[0.09],See title/type; widget may accept further numeric values,Detail-transfer strength,CONFIRMED
+721,IPADAPTER WEIGHT (strenght),[0],See title/type; widget may accept further numeric values,IPAdapter weight,CONFIRMED
+722,ControlNet STRENGTH CANNY,[0.31],See title/type; widget may accept further numeric values,Canny ControlNet strength,CONFIRMED
+723,ControlNet STRENGTH DEPTH,[0.36],See title/type; widget may accept further numeric values,Depth ControlNet strength,CONFIRMED
+771,Steps,[24],See title/type; widget may accept further numeric values,Shared FLUX/PPL step count,CONFIRMED

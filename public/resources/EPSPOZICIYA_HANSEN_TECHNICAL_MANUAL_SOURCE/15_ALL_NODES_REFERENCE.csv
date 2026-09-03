@@ -1,0 +1,253 @@
+﻿node ID,type,title,group,role,mode,upstream,downstream,optional yes/no
+1,KSampler,KSampler,Process SDXL,processing,0,87;230;231;230;230;230;418;418;535;600,14,no
+2,CheckpointLoaderSimple,Load SDXL Checkpoint,MODEL LOADERS,processing,0,,6;7;86;14;168;536,no
+3,EmptyLatentImage,# PREVIEWS (ONLY IF GENERATION=1),SAMPLER CONFIGURATION,processing,0,783;783,535,no
+5,CLIPTextEncode,SDXL Prompt POSITIVE,Process SDXL,processing,0,87;897,418,no
+6,CLIPTextEncode,SDXL Prompt NEGATIVE,Process SDXL,processing,0,2;814,418,no
+7,IPAdapterAdvanced,IPAdapterAdvanced,Process SDXL,processing,0,9;12;13;2;721,168,no
+9,PrepImageForClipVision,IPAdapter Prep Img ClipVis,Process SDXL,processing,0,630,7,no
+12,CLIPVisionLoader,Load SDXL CLIP Vision,MODEL LOADERS,processing,0,,7,no
+13,IPAdapterModelLoader,Load SDXL IPAdapter Model,MODEL LOADERS,processing,0,,7,no
+14,VAEDecode,VAEDecode,Process SDXL,processing,0,2;1,565;715,no
+15,PreviewImage,Preview FINAL IMAGE,OUTPUT,processing,0,849,,yes
+21,ControlNetLoader,Load SDXL DEPTH-ControlNet Model,MODEL LOADERS,processing,0,,417,no
+23,ControlNetLoader,Load SDXL CANNY-ControlNet Model,MODEL LOADERS,processing,0,,419,no
+25,LoadImage,LoadImage,INPUTS,processing,0,,784;675,no
+38,DepthAnythingV2Preprocessor,DepthAnythingV2Preprocessor,Controlnet Preprocessors + Extras,processing,0,79,39;542,no
+39,PreviewImage,PreviewImage,Controlnet Preprocessors + Extras,processing,0,38,,yes
+41,LoadImage,LoadImage,INPUTS,processing,0,,793,no
+42,LoadImage,LoadImage,INPUTS,processing,0,,630;793,no
+52,CLIPTextEncode,FLUX Prompt POSITIVE (Florence2),Process FLUX,processing,0,466;158,453,no
+53,VAEDecode,VAEDecode,Process FLUX,processing,0,57;54,141;72;730;834;888,no
+54,VAELoader,Load FLUX VAE,MODEL LOADERS,processing,0,,53;67;496;494;829;833,no
+57,SamplerCustomAdvanced,SamplerCustomAdvanced,Process FLUX,processing,0,61;60;58;59;67,53,no
+58,KSamplerSelect,KSamplerSelect,SAMPLER CONFIGURATION,processing,0,,57;495;828,no
+59,BasicScheduler,BasicScheduler,SAMPLER CONFIGURATION,processing,0,64;771,57,no
+60,BasicGuider,BasicGuider,Process FLUX,processing,0,64;62,57,no
+61,RandomNoise,RandomNoise,Process FLUX,processing,0,231,57;495;828,no
+62,FluxGuidance,FluxGuidance,SAMPLER CONFIGURATION,processing,0,453,60,no
+64,ModelSamplingFlux,ModelSamplingFlux,Process FLUX,processing,0,467;783;783,59;60;498;497;819;833,no
+67,VAEEncode,VAEEncode,Process FLUX,processing,0,54;573,57,no
+71,Image Comparer (rgthree),Image Comparer INPUT / SDXL,OUTPUT,processing,0,79;779,,yes
+72,Image Comparer (rgthree),Image Comparer SDXL / FLUX,OUTPUT,processing,0,53;779,,yes
+79,LoadImage,LoadImage,INPUTS,processing,0,,38;165;451;71;695;715;783;785,no
+86,CLIPSetLastLayer,CLIPSetLastLayer,Process SDXL,processing,0,2,87,no
+87,Lora Loader Stack (rgthree),Lora Loader Stack (rgthree),MODEL LOADERS,processing,0,86;168,1;5,no
+107,DownloadAndLoadSAM2Model,(Down)Load SAM2Model - SINGLE,MODEL LOADERS,processing,0,,115;585,no
+112,DownloadAndLoadFlorence2Model,(Down)Load Florence2Model,MODEL LOADERS,processing,0,,157;550;580,no
+113,PreviewImage,PreviewImage,OUTPUT,processing,0,550,,yes
+114,Florence2toCoordinates,Florence2toCoordinates,PPL SEGMENTATION,processing,0,550,115,no
+115,Sam2Segmentation,Sam2Segmentation,PPL SEGMENTATION,processing,0,107;114;780,144;524,no
+138,CLIPTextEncode,FLUX Prompt NEGATIVE,Process FLUX,processing,0,466,494;833,no
+141,Image Comparer (rgthree),Image Comparer FLUX / UPSCALE,OUTPUT,processing,0,53;833,,yes
+144,GrowMask,GrowMask,PPL SEGMENTATION,processing,0,115,146,no
+146,MaskBlur+,MaskBlur+,PPL SEGMENTATION,processing,0,144,420;500,no
+153,UpscaleModelLoader,UpscaleModelLoader,MODEL LOADERS,processing,0,,833,no
+154,easy float,UPSCALE BY FACTOR,CONTROL,processing,0,,832;833;835,no
+157,Florence2Run,Florence2Run,Process SEGMENTATION,processing,0,112;779,158,no
+158,ShowText|pysssss,ShowText|pysssss,Process FLUX,processing,0,157,52,no
+165,Image Edge Detection Filter,Image Edge Detection Filter,Controlnet Preprocessors + Extras,processing,0,79,167;732,no
+167,PreviewImage,PreviewImage,Controlnet Preprocessors + Extras,processing,0,165,,yes
+168,CR Model Input Switch,1=SDXL/ 2=SDXL+IPA,CONTROL,control,0,7;2,87,no
+230,KSampler Config (rgthree),SDXL Config,SAMPLER CONFIGURATION,processing,0,,1;1;1;1,no
+231,Seed (rgthree),GLOBAL Seed,SAMPLER CONFIGURATION,processing,0,,1;61,no
+232,Sam2AutoSegmentation,Sam2AutoSegmentation,Process SEGMENTATION,processing,0,234;779,233,no
+233,PreviewImage,PreviewImage,MASKS,processing,0,232,,yes
+234,DownloadAndLoadSAM2Model,(Down)Load SAM2Model - AUTO,MODEL LOADERS,processing,0,,232,no
+293,Image Save,Image Save LQ,OUTPUT,processing,0,849,,yes
+301,LoadImage,LoadImage,INPUTS,processing,0,,845;848,no
+309,LoadImage,LoadImage,INPUTS,processing,0,,840;849,no
+337,MaskFromRGBCMYBW+,MaskFromRGBCMYBW+,Process SEGMENTATION,processing,0,338,339;346;347;348;349;350;352;354,no
+338,LoadImage,LoadImage,INPUTS,processing,0,,337,no
+339,MaskToImage,MaskToImage,MASKS,processing,0,337,340,no
+340,PreviewImage,PreviewImage,Ungrouped,processing,0,339,,yes
+341,PreviewImage,PreviewImage,Ungrouped,processing,0,346,,yes
+342,PreviewImage,PreviewImage,MASKS,processing,0,347,,yes
+343,PreviewImage,PreviewImage,MASKS,processing,0,350,,yes
+344,PreviewImage,PreviewImage,MASKS,processing,0,349,,yes
+345,PreviewImage,PreviewImage,MASKS,processing,0,348,,yes
+346,MaskToImage,MaskToImage,MASKS,processing,0,337,341,no
+347,MaskToImage,MaskToImage,MASKS,processing,0,337,342,no
+348,MaskToImage,MaskToImage,MASKS,processing,0,337,345,no
+349,MaskToImage,MaskToImage,MASKS,processing,0,337,344,no
+350,MaskToImage,MaskToImage,MASKS,processing,0,337,343,no
+351,PreviewImage,PreviewImage,MASKS,processing,0,352,,yes
+352,MaskToImage,MaskToImage,MASKS,processing,0,337,351,no
+353,PreviewImage,PreviewImage,MASKS,processing,0,354,,yes
+354,MaskToImage,MaskToImage,MASKS,processing,0,337,353,no
+408,Text Multiline,PROMPT PPL FLUX,CONTROL,processing,0,,823,no
+409,PreviewImage,PreviewImage,OUTPUT,processing,0,829,,yes
+417,Control Net Stacker,Control Net Stacker DEPTH,Process SDXL,processing,0,21;542;723,419,no
+418,Apply ControlNet Stack,Apply ControlNet Stack,Process SDXL,processing,0,6;5;419,1;1,no
+419,Control Net Stacker,Control Net Stacker CANNY,Process SDXL,processing,0,23;417;722;732,418,no
+420,easy imageCropFromMask,easy imageCropFromMask,PPL FLUX Composite,processing,0,146;780,781,no
+422,easy imageRemBg,easy imageRemBg,PPL FLUX Composite,processing,0,781,430;475,no
+429,Paste By Mask,Paste By Mask,PPL FLUX Composite,processing,0,451;449;779,672,no
+430,MaskToImage,MaskToImage,PPL FLUX Composite,processing,0,422,747;751;449,no
+449,Cut By Mask,Cut By Mask,PPL FLUX Composite,processing,0,477;430,429,no
+451,MaskToImage,MaskToImage,PPL FLUX Composite,processing,0,79,429;480;749,no
+453,CR Conditioning Input Switch,SWITCH 1=GLOBAL Prompt / 2= Florence2,CONTROL,control,0,52;811,62;833,no
+456,INTConstant,SWITCH CNET: 1=EXTRA / 2=PREPROCESS,CONTROL,control,0,,542;732,no
+459,CR Image Input Switch,PPL Switch 1=FLUX / 2=3D,Process FLUX,control,0,543;672;685,480;573,no
+466,DualCLIPLoaderGGUF,DualCLIPLoaderGGUF,MODEL LOADERS,processing,0,,52;138;516;811;831,no
+467,UnetLoaderGGUF,UnetLoaderGGUF,MODEL LOADERS,processing,0,,64;826,no
+475,Images to RGB,Images to RGB,PPL FLUX Composite,processing,0,422,477,no
+477,ColorMatch,ColorMatch,PPL FLUX Composite,processing,0,475;717;779,449,no
+479,Fast Groups Bypasser (rgthree),Fast Groups Bypasser (rgthree),CONTROL,control,0,,,yes
+480,Image Comparer (rgthree),Image Comparer MASK / PPL,OUTPUT,processing,0,451;459,,yes
+494,InpaintModelConditioning,InpaintModelConditioning,PPL 3D INPAINT Detail,processing,0,54;505;506;138;516,495;497,no
+495,SamplerCustomAdvanced,SamplerCustomAdvanced,PPL 3D INPAINT Detail,processing,0,497;498;494;61;58,496,no
+496,VAEDecode,VAEDecode,PPL 3D INPAINT Detail,processing,0,495;54,510,no
+497,BasicGuider,BasicGuider,PPL 3D INPAINT Detail,processing,0,494;64,495,no
+498,BasicScheduler,BasicScheduler,PPL 3D INPAINT Detail,processing,0,64;771,495,no
+499,Separate Mask Components,Separate Mask Components,PPL 3D INPAINT Detail,processing,0,500,502;503;504;509,no
+500,MaskToImage,MaskToImage,PPL 3D INPAINT Detail,processing,0,146,499,no
+502,Mask To Region,Mask To Region,PPL 3D INPAINT Detail,processing,0,499,503;504;509,no
+503,Cut By Mask,Cut By Mask,PPL 3D INPAINT Detail,processing,0,502;499;552,506;507,no
+504,Cut By Mask,Cut By Mask,PPL 3D INPAINT Detail,processing,0,499;502,505;510;522,no
+505,Image To Mask,Image To Mask,PPL 3D INPAINT Detail,processing,0,504,494,no
+506,Change Channel Count,Change Channel Count,PPL 3D INPAINT Detail,processing,0,503,494,no
+507,PreviewImage,PreviewImage,OUTPUT,processing,0,503,,yes
+508,PreviewImage,PreviewImage,OUTPUT,processing,0,522,,yes
+509,Paste By Mask,Paste By Mask,PPL 3D INPAINT Detail,processing,0,510;502;499;779,518;684,no
+510,Combine Masks,Combine Masks,PPL 3D INPAINT Detail,processing,0,496;504,509,no
+516,CLIPTextEncode,CLIPTextEncode,PPL 3D INPAINT Detail,processing,0,466,494,no
+518,Image Comparer (rgthree),Image Comparer (rgthree),OUTPUT,processing,0,509;552,,yes
+522,CR Image Input Switch,People Input Switch 1=FLUX / 2=3D rendered,PPL SEGMENTATION,control,0,504;524;543,508,no
+524,MaskToImage,MaskToImage,PPL SEGMENTATION,processing,0,115,522,no
+531,Image Save,Image Save HQ,OUTPUT,processing,0,833,,yes
+535,CR Latent Input Switch,CR Latent Input Switch,Process SDXL,control,0,3;536;541,1,no
+536,VAEEncode,VAEEncode,Process SDXL,processing,0,592;2,535,no
+541,INTConstant,1=TXT+CNET2IMG / 2=IMG+CNET2IMG,CONTROL,control,0,,535;592;602,no
+542,CR Image Input Switch,CR Image Input Switch,Process SDXL,processing,0,456;784;38,417,no
+543,INTConstant,SWITCH PPL: 1=FLUX / 2=INPUT,CONTROL,control,0,,459;522;552;715,no
+550,Florence2Run,Florence2Run,PPL SEGMENTATION,processing,0,112;780,113;114,no
+552,CR Image Input Switch,People Input Switch 1=FLUX / 2=3D rendered,PPL SEGMENTATION,control,0,543;715;829,503;518;780,no
+565,easy imageDetailTransfer,easy imageDetailTransfer,Process SDXL,processing,0,14;720;592;754,779,no
+573,easy imageDetailTransfer,easy imageDetailTransfer,Process FLUX,processing,0,459;720;775;754,67,no
+580,Florence2Run,Florence2Run,Process SEGMENTATION,processing,0,112;591;592,584,no
+581,PreviewImage,PreviewImage,MASKS,processing,0,583,,yes
+583,MaskToImage,MaskToImage,Process SEGMENTATION,processing,0,585,581;749,no
+584,Florence2toCoordinates,Florence2toCoordinates,Process SEGMENTATION,processing,0,580,585,no
+585,Sam2Segmentation,Sam2Segmentation,Process SEGMENTATION,processing,0,584;107;592,583;775,no
+591,Text Multiline,PROMPT CREATE DETAIL MASK,CONTROL,processing,0,,580;813,no
+592,CR Image Input Switch,CR Image Input Switch,Process SEGMENTATION,control,0,541;695;783,585;580;536;775;565,no
+600,If ANY return A else B-🔬,If ANY return A else B-🔬,Process SDXL,control,0,602;608;607,1,no
+602,Compare-🔬,Compare-🔬,Process SDXL,control,0,609;541,600,no
+607,Float-🔬,Float-🔬,Process SDXL,control,0,,600,no
+608,Float-🔬,DENOISE (ONLY IF GENERATION=2),CONTROL,control,0,,600,no
+609,Int-🔬,Int-🔬,Process SDXL,control,0,,602,no
+612,Label (rgthree),SDXL,MODEL LOADERS,processing,0,,,yes
+614,Label (rgthree),FLUX,MODEL LOADERS,processing,0,,,yes
+615,Label (rgthree),SDXL CONTROLNETS,MODEL LOADERS,processing,0,,,yes
+616,Label (rgthree),SDXL IPADAPTER,MODEL LOADERS,processing,0,,,yes
+617,Label (rgthree),SDXL LORA(S),MODEL LOADERS,processing,0,,,yes
+618,Label (rgthree),SAM2/Florence2,MODEL LOADERS,processing,0,,,yes
+619,Label (rgthree),UPSCALE,MODEL LOADERS,processing,0,,,yes
+626,Label (rgthree),BASE IMAGE,INPUTS,processing,0,,,yes
+627,Label (rgthree),EXTRA_DEPTH,INPUTS,processing,0,,,yes
+628,Label (rgthree),MASK GENERATION,INPUTS,processing,0,,,yes
+630,CR Image Input Switch,IPA-INPUT IMG: 1=FIRST/ 2=BOTH,CONTROL,control,0,42;793,9,no
+631,Label (rgthree),IPADAPTER IMAGE(S),INPUTS,processing,0,,,yes
+636,Label (rgthree),LOGO etc.,INPUTS,processing,0,,,yes
+637,Label (rgthree),BASE CONFIG,CONTROL,processing,0,,,yes
+638,Label (rgthree),GENERATION,CONTROL,processing,0,,,yes
+639,Label (rgthree),IPADAPTER,CONTROL,processing,0,,,yes
+640,Label (rgthree),CONTROLNET,CONTROL,processing,0,,,yes
+641,Label (rgthree),PEOPLE,CONTROL,processing,0,,,yes
+642,Label (rgthree),GLOBAL PROMPT,CONTROL,processing,0,,,yes
+643,Label (rgthree),PROMPT FLUX,CONTROL,processing,0,,,yes
+644,Label (rgthree),DETAIL CONSERVATION,CONTROL,processing,0,,,yes
+646,Label (rgthree),UPSCALE,CONTROL,processing,0,,,yes
+672,Images to RGB,Images to RGB,PPL FLUX Composite,processing,0,429,459,no
+675,Image Comparer (rgthree),Image Comparer (rgthree),OUTPUT,processing,0,25;833,,yes
+684,Images to RGB,Images to RGB,PPL 3D INPAINT Detail,processing,0,509,685;782,no
+685,CR Image Input Switch,CR Image Input Switch,PPL 3D INPAINT Detail,control,0,693;684;782,459,no
+693,INTConstant,1=RESIZE INPUT / 2=ORIGINAL INPUT,CONTROL,control,0,,695;685,no
+695,CR Image Input Switch,CR Image Input Switch,Process SEGMENTATION,control,0,693;79;783,592,no
+696,Label (rgthree),RESOLUTION,CONTROL,processing,0,,,yes
+702,easy int,RESIZE TO,CONTROL,control,0,,783;783,no
+708,Label (rgthree),SDXL,SAMPLER CONFIGURATION,processing,0,,,yes
+709,Label (rgthree),FLUX,SAMPLER CONFIGURATION,processing,0,,,yes
+710,Label (rgthree),STAGE 1 (SDXL) PREVIEWS,SAMPLER CONFIGURATION,processing,0,,,yes
+711,Label (rgthree),GLOBAL SEED,SAMPLER CONFIGURATION,processing,0,,,yes
+715,CR Image Input Switch,People Input Switch 1=FLUX / 2=3D rendered,PPL SEGMENTATION,control,0,79;14;543,552,no
+717,Float-🔬,COLOR FROM ENVIRONMENT STRENGHT,CONTROL,control,0,,477,no
+720,Float-🔬,STAGE 1 & 2 STRENGTH,CONTROL,control,0,,565;573,no
+721,Float-🔬,IPADAPTER WEIGHT (strenght),CONTROL,control,0,,7,no
+722,Float-🔬,ControlNet STRENGTH CANNY,CONTROL,control,0,,419,no
+723,Float-🔬,ControlNet STRENGTH DEPTH,CONTROL,control,0,,417,no
+730,Image Save,Image Save LQ,OUTPUT,processing,0,53,,yes
+732,CR Image Input Switch,CR Image Input Switch,Process SDXL,processing,0,456;785;165,419,no
+747,Cut By Mask,Cut By Mask,PPL FLUX Composite,processing,0,430;751,749,no
+749,Paste By Mask,Paste By Mask,PPL FLUX Composite,processing,0,583;747;451,754,no
+751,ColorCorrect,ColorCorrect,PPL FLUX Composite,processing,0,430,747,no
+754,Image To Mask,Image To Mask,PPL FLUX Composite,processing,0,749,573;565;834,no
+760,MarkdownNote,MarkdownNote,Ungrouped,processing,0,,,yes
+761,MarkdownNote,MarkdownNote,Ungrouped,processing,0,,,yes
+762,MarkdownNote,MarkdownNote,Ungrouped,processing,0,,,yes
+763,MarkdownNote,MarkdownNote,Ungrouped,processing,0,,,yes
+764,MarkdownNote,MarkdownNote,Ungrouped,processing,0,,,yes
+765,MarkdownNote,MarkdownNote,Ungrouped,processing,0,,,yes
+771,Int-🔬,Steps,SAMPLER CONFIGURATION,control,0,,59;498;819;833,no
+775,ImageCompositeMasked,ImageCompositeMasked,Process SEGMENTATION,processing,0,585;776;592,573;834,no
+776,EmptyImage,EmptyImage,Process SEGMENTATION,processing,0,783;783,775,no
+779,Image Filter,Image Filter,SAMPLER CONFIGURATION,processing,0,565,232;477;157;429;71;72;509,no
+780,ImageResizeKJv2,ImageResizeKJv2,PPL SEGMENTATION,processing,0,552,115;420;550,no
+781,ImageResizeKJv2,ImageResizeKJv2,PPL FLUX Composite,processing,0,420,422,no
+782,ImageResizeKJv2,ImageResizeKJv2,PPL 3D INPAINT Detail,processing,0,684,685,no
+783,ImageResizeKJv2,ImageResizeKJv2,Process SEGMENTATION,processing,0,79;702;702,695;592;3;64;776;3;64;776,no
+784,ImageResizeKJv2,ImageResizeKJv2,Process SDXL,processing,0,25,542,no
+785,ImageResizeKJv2,ImageResizeKJv2,Process SDXL,processing,0,79,732,no
+793,BatchImagesNode,IPAdapter Batch Images,Process SDXL,processing,0,42;41,630,no
+797,PrimitiveStringMultiline,PROMPT **Positive** OBJECT,CONTROL,processing,0,,895,no
+799,PrimitiveStringMultiline,PROMPT **Positive** ENVIRONMENT,CONTROL,processing,0,,824;895,no
+800,PrimitiveStringMultiline,"PROMPT **Positive** LIGHT, STYLE",CONTROL,processing,0,,821;896,no
+801,PrimitiveStringMultiline,PROMPT **Positive** ADDITIONAL,CONTROL,processing,0,,896,no
+802,PrimitiveStringMultiline,PROMPT **Negative** IMAGE SPECIFIC,CONTROL,processing,0,,813,no
+803,PrimitiveStringMultiline,PROMPT **Negative** GLOBAL,CONTROL,processing,0,,814,no
+804,ShowText|pysssss,ShowText|pysssss,Process FLUX,processing,0,897,,yes
+811,CLIPTextEncode,CLIPTextEncode,Process FLUX,processing,0,466;897,453,no
+813,StringConcatenate,StringConcatenate,Process SDXL,processing,0,591;802,814,no
+814,StringConcatenate,StringConcatenate,Process SDXL,processing,0,803;813,6,no
+819,BasicScheduler,BasicScheduler,PPL FLUX Generate,processing,0,64;771,828,no
+820,StringConcatenate,StringConcatenate,PPL FLUX Generate,processing,0,824;821,831,no
+821,StringConcatenate,StringConcatenate,PPL FLUX Generate,processing,0,822;800,820,no
+822,PrimitiveStringMultiline,PrimitiveStringMultiline,PPL FLUX Generate,processing,0,,821,no
+823,StringConcatenate,StringConcatenate,PPL FLUX Generate,processing,0,825;408,824,no
+824,StringConcatenate,StringConcatenate,PPL FLUX Generate,processing,0,823;799,820,no
+825,PrimitiveStringMultiline,PrimitiveStringMultiline,PPL FLUX Generate,processing,0,,823,no
+826,BasicGuider,BasicGuider,PPL FLUX Generate,processing,0,830;467,828,no
+827,EmptyLatentImage,EmptyLatentImage,PPL FLUX Generate,processing,0,,828,no
+828,SamplerCustomAdvanced,SamplerCustomAdvanced,PPL FLUX Generate,processing,0,826;819;827;61;58,829,no
+829,VAEDecode,VAEDecode,PPL FLUX Generate,processing,0,828;54,409;552,no
+830,FluxGuidance,FluxGuidance,PPL FLUX Generate,processing,0,831,826,no
+831,CLIPTextEncode,CLIPTextEncode,PPL FLUX Generate,processing,0,820;466,830,no
+832,MathExpression|pysssss,tile height (Math Expression 🐍),Process UPSCALE,processing,4,154;890,833,yes
+833,UltimateSDUpscale,UltimateSDUpscale,Process UPSCALE,processing,4,834;832;835;154;64;453;138;54;153;771,141;531;675;848;851,yes
+834,easy imageDetailTransfer,easy imageDetailTransfer,Process UPSCALE,processing,4,53;775;754,833,yes
+835,MathExpression|pysssss,tile height (Math Expression 🐍),Process UPSCALE,processing,4,154;893,833,yes
+840,ImageResize+,ImageResize+,Process ADD LOGO,processing,4,850;309,841;842;849,yes
+841,MathExpression|pysssss,MathExpression|pysssss,Process ADD LOGO,processing,4,840;851,849,yes
+842,MathExpression|pysssss,MathExpression|pysssss,Process ADD LOGO,processing,4,840;851;851,849,yes
+843,MathExpression|pysssss,MathExpression|pysssss,Process ADD LOGO,processing,4,851,848,yes
+844,MathExpression|pysssss,MathExpression|pysssss,Process ADD LOGO,processing,4,845;851;851,848,yes
+845,ImageResize+,ImageResize+,Process ADD LOGO,processing,4,846;301,844;848,yes
+846,MathExpression|pysssss,MathExpression|pysssss,Process ADD LOGO,processing,4,851,845,yes
+848,Image Overlay,Image Overlay,Process ADD LOGO,processing,4,845;843;844;833;301,849,yes
+849,Image Overlay,Image Overlay,Process ADD LOGO,processing,4,848;840;841;842;309,15;293,yes
+850,MathExpression|pysssss,MathExpression|pysssss,Process ADD LOGO,processing,4,851,840,yes
+851,GetImageSize,GetImageSize,Process ADD LOGO,processing,4,833,841;842;843;844;846;850;842;844,yes
+883,PrimitiveInt,PrimitiveInt,Process UPSCALE,processing,4,,889;892,yes
+884,PrimitiveInt,PrimitiveInt,Process UPSCALE,processing,4,,889;892,yes
+887,Compare-🔬,Compare-🔬,Process UPSCALE,processing,4,888;888,889;892,yes
+888,GetImageSize,GetImageSize,Process UPSCALE,processing,4,53,887;887;891;891,yes
+889,If ANY return A else B-🔬,If ANY return A else B-🔬,Process UPSCALE,processing,4,887;884;883,890,yes
+890,If ANY return A else B-🔬,If ANY return A else B-🔬,Process UPSCALE,processing,4,891;894;889,832,yes
+891,Compare-🔬,Compare-🔬,Process UPSCALE,processing,4,888;888,890;893,yes
+892,If ANY return A else B-🔬,If ANY return A else B-🔬,Process UPSCALE,processing,4,887;883;884,893,yes
+893,If ANY return A else B-🔬,If ANY return A else B-🔬,Process UPSCALE,processing,4,891;894;892,835,yes
+894,PrimitiveInt,PrimitiveInt,Process UPSCALE,processing,4,,890;893,yes
+895,StringConcatenate,StringConcatenate,Process FLUX,processing,0,797;799,897,no
+896,StringConcatenate,StringConcatenate,Process FLUX,processing,0,800;801,897,no
+897,StringConcatenate,StringConcatenate,Process FLUX,processing,0,895;896,5;804;811,no
