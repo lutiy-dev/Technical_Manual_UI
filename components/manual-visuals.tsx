@@ -136,7 +136,7 @@ function OutputExampleGallery({ compact = false }: { compact?: boolean }) {
             <details>
               <summary>Пути к файлу</summary>
               <dl>
-                <div><dt>TEMP source</dt><dd>{asset.sourcePath}</dd></div>
+                <div><dt>Source path</dt><dd>{asset.sourcePath}</dd></div>
                 <div><dt>Static project</dt><dd>{asset.projectPath}</dd></div>
               </dl>
             </details>
@@ -570,7 +570,7 @@ export function OutputVisual() {
         <OutputExampleGallery />
         <div className="temp-path-note">
           <CircleAlert size={17} />
-          <p>TEMP/cache source показывается для provenance. Сайт использует только устойчивую копию из <code>public/assets/output</code>.</p>
+          <p>Исходный путь показывается для provenance. Сайт использует только устойчивую копию из <code>public/assets/output</code>; TEMP-файл может быть удалён системой.</p>
         </div>
       </section>
 

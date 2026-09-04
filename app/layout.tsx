@@ -3,13 +3,13 @@ import './globals.css';
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  'https://people-ppl-hansen-manual.ogorkov.chatgpt.site';
+  'https://lutiy-dev.github.io/Technical_Manual_UI/';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: 'PEOPLE / PPL — Hansen Technical Manual',
+  title: 'EPSPOZICIYA ARCHVIZ · Technical Workflow Manual',
   description:
-    'Интерактивный технический учебник по PEOPLE/PPL ветке Epspoziciya_archviz_ph_sdxlflux_v001.',
+    'Интерактивное техническое руководство по полному графу Epspoziciya_archviz_ph_sdxlflux_v001, включая PEOPLE/PPL, SDXL, ControlNet, FLUX и output.',
 };
 
 export default function RootLayout({

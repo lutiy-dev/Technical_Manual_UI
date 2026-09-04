@@ -13,7 +13,7 @@ const pagesDirectory = path.join(clientDirectory, projectSegment);
 
 await mkdir(pagesDirectory, { recursive: true });
 
-for (const directory of ['assets', 'resources']) {
+for (const directory of ['assets', 'downloads', 'resources']) {
   await cp(path.join(clientDirectory, directory), path.join(pagesDirectory, directory), {
     recursive: true,
     force: true,

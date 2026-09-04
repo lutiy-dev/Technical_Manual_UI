@@ -1,63 +1,24 @@
-export type EvidenceStatus = 'confirmed' | 'inferred' | 'not-confirmed';
+import type {
+  Chapter,
+  ChapterSection,
+  ManualCategory,
+} from './manual-types';
+import { additionalChapters } from './manual';
 
-export type Fact = {
-  status: EvidenceStatus;
-  title: string;
-  text: string;
-};
-
-export type CodeExample = {
-  title: string;
-  label: string;
-  code: string;
-  note?: string;
-};
-
-export type DataTable = {
-  columns: string[];
-  rows: string[][];
-};
-
-export type ChapterSection = {
-  id: string;
-  eyebrow?: string;
-  title: string;
-  paragraphs?: string[];
-  bullets?: string[];
-  facts?: Fact[];
-  codeExamples?: CodeExample[];
-  table?: DataTable;
-};
-
-export type Chapter = {
-  index: number;
-  slug: string;
-  navTitle: string;
-  eyebrow: string;
-  title: string;
-  lede: string;
-  status: EvidenceStatus;
-  statusNote: string;
-  visual:
-    | 'overview'
-    | 'prompt'
-    | 'generation'
-    | 'mask'
-    | 'preparation'
-    | 'selectors'
-    | 'composite'
-    | 'diagnostics'
-    | 'checklist'
-    | 'output'
-    | 'examples'
-    | 'resources';
-  sections: ChapterSection[];
-};
+export type {
+  Chapter,
+  ChapterSection,
+  CodeExample,
+  DataTable,
+  EvidenceStatus,
+  Fact,
+  ManualCategory,
+} from './manual-types';
 
 export const sourceRoot =
   '/resources/EPSPOZICIYA_HANSEN_TECHNICAL_MANUAL_SOURCE';
 
-export const manualChapters = ([
+const existingChapters = ([
   {
     index: 1,
     slug: 'overview',
@@ -909,7 +870,19 @@ export const manualChapters = ([
         eyebrow: '02 · DOWNLOADS',
         title: 'Техническая база workflow',
         paragraphs: [
-          'ZIP содержит 22 файла: 14 глав Markdown, две CSV-таблицы, JSON-спецификацию, DOT и четыре SVG-карты. Workflow не модифицировался при подготовке документации.',
+          'Актуальный ZIP содержит 24 файла: 16 глав Markdown, две CSV-таблицы, JSON-спецификацию, DOT и четыре SVG-карты. Файлы 17_AUDIT_ERRATA.md и 18_WORKFLOW_MODEL_MANIFEST.md добавлены поверх исходного 22-файлового аудита; документы 01–16 не переписывались.',
+        ],
+        facts: [
+          {
+            status: 'confirmed',
+            title: 'Derived specification bundled',
+            text: 'HANSEN_WORKFLOW_SPEC.json, две CSV-таблицы и четыре SVG-карты доступны для скачивания.',
+          },
+          {
+            status: 'not-confirmed',
+            title: 'Raw workflow отсутствует в bundle',
+            text: 'Epspoziciya_archviz_ph_sdxlflux_v001.json не найден в текущем workspace и не добавлен в ZIP. Source-of-truth имя известно, но сырой JSON нужно приложить отдельно.',
+          },
         ],
       },
       {
@@ -936,7 +909,167 @@ export const manualChapters = ([
       },
     ],
   },
-] satisfies Chapter[]).sort((a, b) => a.index - b.index);
+] satisfies Omit<Chapter, 'category'>[]).sort((a, b) => a.index - b.index);
+
+const existingChapterMap = Object.fromEntries(
+  existingChapters.map((chapter) => [chapter.slug, chapter]),
+) as Record<string, (typeof existingChapters)[number]>;
+
+const additionalChapterMap = Object.fromEntries(
+  additionalChapters.map((chapter) => [chapter.slug, chapter]),
+) as Record<string, Chapter>;
+
+function existingChapter(
+  slug: string,
+  category: ManualCategory,
+  overrides: Partial<Chapter> = {},
+): Chapter {
+  const chapter = existingChapterMap[slug];
+  if (!chapter) throw new Error(`Missing existing chapter: ${slug}`);
+  return { ...chapter, category, ...overrides } as Chapter;
+}
+
+function additionalChapter(slug: string): Chapter {
+  const chapter = additionalChapterMap[slug];
+  if (!chapter) throw new Error(`Missing additional chapter: ${slug}`);
+  return chapter;
+}
+
+const peopleOverview = existingChapter('overview', 'people-ppl', {
+  slug: 'people-ppl-overview',
+  navTitle: 'PPL Overview',
+  eyebrow: 'PEOPLE / PPL · MODULE',
+  relatedChapters: ['node-408-prompt', 'positioning', 'selector-logic', 'main-flux'],
+});
+
+const selectorTruthSection: ChapterSection = {
+  id: 'selector-truth-table',
+  eyebrow: '04 · TRUTH TABLE',
+  title: '543 × 693 × 715: какой source действительно выбран',
+  table: {
+    columns: ['543', '693', '715 effective', '552 source', '459 return'],
+    rows: [
+      ['1 · FLUX', '1 · resized', '1', 'PPL FLUX decode 829', 'First composite 672'],
+      ['1 · FLUX', '2 · original', '1', 'PPL FLUX decode 829', 'First composite 672'],
+      ['2 · INPUT', '1 · resized', '2', '715 selected input, then component inpaint', 'Resized return 685'],
+      ['2 · INPUT', '2 · original', '2', '715 selected input, then component inpaint', 'Original-canvas return 685'],
+    ],
+  },
+  facts: [
+    {
+      status: 'confirmed',
+      title: 'Linked override',
+      text: 'Stored widget 2 inside node 715 does not select mode 2 while Input is linked to node 543=1.',
+    },
+    {
+      status: 'not-confirmed',
+      title: '3D source semantics',
+      text: 'Topology does not expose a dedicated LoadImage that proves the origin of the source labelled 3D rendered.',
+    },
+  ],
+};
+
+const fullDiagnosticsSection: ChapterSection = {
+  id: 'whole-graph-probes',
+  eyebrow: '04 · WHOLE GRAPH',
+  title: 'Диагностическая лестница от input до optional HQ',
+  table: {
+    columns: ['Stage', 'Probe', 'Stop condition'],
+    rows: [
+      ['Preprocessors', '39 depth / 167 edge', 'Карта неверна — не запускать SDXL diagnosis'],
+      ['Main SDXL', '71: input 79 vs result 779', 'SDXL result неверен — PEOPLE ещё не проверять'],
+      ['Masks', '113 / 233 / 340–353 / 581', 'Проверить polarity, bounds и canvas size'],
+      ['PEOPLE', '409 / 507 / 508 / 480 / 518', 'Найти последний корректный PPL stage'],
+      ['Main FLUX', '72: 779 vs 53; active save 730', 'Проверить survival после denoise 0.18'],
+      ['Upscale / overlay', '141 / 675 / 15 / 531 / 293', 'Сначала снять bypass, затем проверять'],
+    ],
+  },
+};
+
+const workflowChecklistSection: ChapterSection = {
+  id: 'whole-workflow-checklist',
+  eyebrow: '03 · FULL WORKFLOW',
+  title: 'Проверки до и после PEOPLE/PPL',
+  bullets: [
+    'Input 79 и выбранные optional files доступны в активной ComfyUI instance.',
+    'Controls 541 / 456 / 168 / 453 / 543 / 693 имеют ожидаемые effective values.',
+    'Depth/Canny preview проверен до KSampler 1.',
+    'SDXL result корректен на comparer 71.',
+    'Architectural и PEOPLE masks имеют правильную polarity и размеры.',
+    'Selected PPL result виден на 459 / comparer 480.',
+    'PEOPLE сохраняется после main FLUX decode 53 / save 730.',
+    'HQ/overlay checkpoints проверяются только после осознанного включения mode-4 ветки.',
+  ],
+};
+
+const goldenRunSection: ChapterSection = {
+  id: 'golden-run',
+  eyebrow: '03 · GOLDEN RUN',
+  title: 'Эталонный прогон ещё не зафиксирован',
+  paragraphs: [
+    'Топология, controls, модели и checkpoints документированы, но учебник пока не содержит одного воспроизводимого запуска с зафиксированными входами, seed, эффективными значениями selectors, runtime preview и контрольными output-файлами.',
+  ],
+  facts: [
+    {
+      status: 'not-confirmed',
+      title: 'Golden Run artifact',
+      text: 'Нет подтверждённого набора input + workflow JSON + seed + screenshots checkpoints + LQ/HQ output, который можно воспроизвести на чистой instance.',
+    },
+    {
+      status: 'inferred',
+      title: 'Минимальный пакет фиксации',
+      text: 'Нужны hash workflow, input 79, optional inputs, model manifest, controls 541/456/168/453/543/693, seed, previews 39/167/71/409/480/72 и фактический файл из 730.',
+    },
+  ],
+  bullets: [
+    'Сохранить неизменённый raw workflow и его SHA-256.',
+    'Записать абсолютный ComfyUI root и версии custom-node packages.',
+    'Зафиксировать seed и effective linked values, а не только видимые widgets.',
+    'Сохранить промежуточные probes и итог LQ1; HQ/overlay — отдельным прогоном после снятия bypass.',
+  ],
+};
+
+export const manualChapters: Chapter[] = [
+  additionalChapter('overview'),
+  additionalChapter('graph-reading'),
+  additionalChapter('inputs'),
+  additionalChapter('control-panel'),
+  additionalChapter('models-dependencies'),
+  additionalChapter('global-prompts'),
+  additionalChapter('sdxl'),
+  additionalChapter('controlnet'),
+  additionalChapter('ipadapter-lora'),
+  additionalChapter('segmentation-masks'),
+  additionalChapter('detail-conservation'),
+  peopleOverview,
+  existingChapter('node-408-prompt', 'people-ppl'),
+  existingChapter('generation', 'people-ppl', { navTitle: 'PPL Generation' }),
+  existingChapter('segmentation-mask', 'people-ppl', { navTitle: 'PPL Segmentation / Mask' }),
+  existingChapter('preparation-color-match', 'people-ppl'),
+  additionalChapter('positioning'),
+  existingChapter('selector-logic', 'people-ppl', {
+    sections: [...existingChapterMap['selector-logic'].sections, selectorTruthSection],
+  }),
+  additionalChapter('ppl-mode-2-inpaint'),
+  existingChapter('composite', 'people-ppl'),
+  additionalChapter('main-flux'),
+  additionalChapter('upscale-overlay'),
+  existingChapter('output', 'final-pipeline', { navTitle: 'Output & Comparers' }),
+  existingChapter('diagnostics', 'final-pipeline', {
+    navTitle: 'Full Workflow Diagnostics',
+    sections: [...existingChapterMap.diagnostics.sections, fullDiagnosticsSection],
+  }),
+  existingChapter('checklist', 'final-pipeline', {
+    navTitle: 'Full Workflow Checklist',
+    sections: [...existingChapterMap.checklist.sections, workflowChecklistSection],
+  }),
+  existingChapter('examples', 'evidence-reference', {
+    navTitle: 'Examples & Golden Run',
+    sections: [...existingChapterMap.examples.sections, goldenRunSection],
+  }),
+  additionalChapter('node-index'),
+  existingChapter('resources', 'evidence-reference', { navTitle: 'Resources, Provenance & Errata' }),
+].map((chapter, index) => ({ ...chapter, index: index + 1 }));
 
 export const chapterBySlug = Object.fromEntries(
   manualChapters.map((chapter) => [chapter.slug, chapter]),
@@ -1017,10 +1150,64 @@ export const upstreamResources = [
 
 export const downloadResources = [
   {
+    title: 'React source project',
+    href: '/downloads/EPSPOZICIYA_ARCHVIZ_TECHNICAL_MANUAL_SOURCE.zip',
+    meta: 'ZIP · source',
+    description: 'Исходники React/TypeScript/CSS, public assets и конфигурация GitHub Pages без dependencies.',
+  },
+  {
+    title: 'Ready static build',
+    href: '/downloads/EPSPOZICIYA_ARCHVIZ_TECHNICAL_MANUAL_STATIC_BUILD.zip',
+    meta: 'ZIP · static HTML',
+    description: 'Готовая автономная экспортированная сборка с 28 route directories и base path GitHub Pages.',
+  },
+  {
     title: 'Полный технический архив',
     href: '/resources/EPSPOZICIYA_HANSEN_TECHNICAL_MANUAL_SOURCE.zip',
-    meta: 'ZIP · 22 files',
-    description: 'Все Markdown, CSV, JSON, DOT и SVG из source package.',
+    meta: 'ZIP · 24 files',
+    description: 'Все Markdown, CSV, JSON, DOT и SVG из текущего source package.',
+  },
+  {
+    title: 'Master architecture',
+    href: `${sourceRoot}/01_MASTER_ARCHITECTURE.md`,
+    meta: 'Markdown',
+    description: 'Полная архитектура, active route, groups и ключевая topology.',
+  },
+  {
+    title: 'Control panel',
+    href: `${sourceRoot}/02_CONTROL_PANEL.md`,
+    meta: 'Markdown',
+    description: 'Все selectors, linked controls и текущие modes.',
+  },
+  {
+    title: 'Inputs',
+    href: `${sourceRoot}/03_INPUTS.md`,
+    meta: 'Markdown',
+    description: 'Serialized input filenames, roles и mode-dependent sources.',
+  },
+  {
+    title: 'Prompts & routing',
+    href: `${sourceRoot}/04_PROMPTS.md`,
+    meta: 'Markdown',
+    description: 'Текущие prompt values и exact assembly.',
+  },
+  {
+    title: 'Main SDXL',
+    href: `${sourceRoot}/05_SDXL.md`,
+    meta: 'Markdown',
+    description: 'Checkpoint, conditioning, sampler и latent modes.',
+  },
+  {
+    title: 'ControlNet',
+    href: `${sourceRoot}/06_CONTROLNET.md`,
+    meta: 'Markdown · see errata',
+    description: 'Depth/Canny chapter; исправленная source topology указана в 17_AUDIT_ERRATA.',
+  },
+  {
+    title: 'IPAdapter references',
+    href: `${sourceRoot}/07_IPADAPTER_REFERENCES.md`,
+    meta: 'Markdown',
+    description: 'Reference images, model switch и current selected-away state.',
   },
   {
     title: 'PEOPLE / PPL route',
@@ -1035,28 +1222,64 @@ export const downloadResources = [
     description: 'Florence2, SAM2, mask transforms и consumers.',
   },
   {
-    title: 'Prompts & routing',
-    href: `${sourceRoot}/04_PROMPTS.md`,
-    meta: 'Markdown',
-    description: 'Текущие prompt values и exact assembly.',
-  },
-  {
-    title: 'Control panel',
-    href: `${sourceRoot}/02_CONTROL_PANEL.md`,
-    meta: 'Markdown',
-    description: 'Все selectors, linked controls и текущие modes.',
-  },
-  {
     title: 'Detail conservation',
     href: `${sourceRoot}/10_DETAIL_CONSERVATION.md`,
     meta: 'Markdown',
     description: 'Возврат PPL через imageDetailTransfer 573.',
   },
   {
+    title: 'Main FLUX',
+    href: `${sourceRoot}/11_FLUX.md`,
+    meta: 'Markdown',
+    description: 'Main img2img return 459 → 573 → 67 → 57 → 53.',
+  },
+  {
+    title: 'Upscale & overlays',
+    href: `${sourceRoot}/12_UPSCALE.md`,
+    meta: 'Markdown',
+    description: 'Saved mode-4 HQ, tiling и logo overlay chain.',
+  },
+  {
     title: 'Output comparers',
     href: `${sourceRoot}/13_OUTPUT_COMPARERS.md`,
     meta: 'Markdown',
     description: 'Preview, comparer, save и final output points.',
+  },
+  {
+    title: 'Legacy compatibility',
+    href: `${sourceRoot}/14_LEGACY_COMPATIBILITY.md`,
+    meta: 'Markdown',
+    description: 'Исторические copies и границы совместимости.',
+  },
+  {
+    title: 'Audit errata',
+    href: `${sourceRoot}/17_AUDIT_ERRATA.md`,
+    meta: 'Markdown · NEW',
+    description: 'Отдельный журнал исправлений, ограничений и неподтверждённых данных.',
+  },
+  {
+    title: 'Workflow model manifest',
+    href: `${sourceRoot}/18_WORKFLOW_MODEL_MANIFEST.md`,
+    meta: 'Markdown · NEW',
+    description: 'Model filenames, loader nodes и package-provider mapping.',
+  },
+  {
+    title: 'Master graph source',
+    href: `${sourceRoot}/HANSEN_MASTER_MAP.dot`,
+    meta: 'Graphviz DOT',
+    description: 'Редактируемый исходник общей графовой карты.',
+  },
+  {
+    title: 'Master graph map',
+    href: `${sourceRoot}/HANSEN_MASTER_MAP.svg`,
+    meta: 'SVG',
+    description: 'Полная Graphviz-карта workflow.',
+  },
+  {
+    title: 'Master pipeline',
+    href: `${sourceRoot}/MASTER_PIPELINE.svg`,
+    meta: 'SVG',
+    description: 'Компактный active pipeline и optional continuation.',
   },
   {
     title: 'PEOPLE route map',

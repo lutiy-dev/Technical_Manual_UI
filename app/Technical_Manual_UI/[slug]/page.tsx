@@ -17,7 +17,7 @@ export async function generateMetadata({
   if (!chapter) return {};
 
   return {
-    title: `${chapter.navTitle} · PEOPLE / PPL Manual`,
+    title: `${chapter.navTitle} · EPSPOZICIYA ARCHVIZ Manual`,
     description: chapter.lede,
   };
 }

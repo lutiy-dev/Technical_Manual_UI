@@ -1,4 +1,4 @@
-name: Deploy PEOPLE PPL manual to GitHub Pages
+name: Deploy EPSPOZICIYA ARCHVIZ manual to GitHub Pages
 
 on:
   push:

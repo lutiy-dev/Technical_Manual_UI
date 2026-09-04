@@ -1,11 +1,16 @@
-# PEOPLE / PPL — Hansen Technical Manual
+# EPSPOZICIYA ARCHVIZ · TECHNICAL WORKFLOW MANUAL
 
-Интерактивный технический учебник по ветке PEOPLE/PPL workflow
-`Epspoziciya_archviz_ph_sdxlflux_v001`.
+Интерактивный технический учебник по полному графу workflow
+`Epspoziciya_archviz_ph_sdxlflux_v001`. PEOPLE/PPL сохранён как отдельный
+учебный модуль внутри общей архитектуры.
 
-Сайт разбит на отдельные маршруты: Overview, Node 408 Prompt, Generation,
-Segmentation/Mask, Preparation/Color Match, Selector Logic, Composite, Output,
-Diagnostics, Checklist, Examples и Resources.
+Сайт разбит на 28 отдельных маршрутов, объединённых в пять групп:
+Foundation, Base Generation, PEOPLE/PPL Module, Final Pipeline и Evidence &
+Reference. В руководство входят полная архитектура, правила чтения графа,
+inputs, 28 controls, модели, prompts, SDXL, ControlNet, IPAdapter/LoRA, четыре
+системы масок, detail conservation, PEOPLE/PPL, main FLUX, optional
+upscale/overlay, output, diagnostics, checklist, examples, интерактивный индекс
+252 узлов и Resources.
 
 ## Онлайн-версия
 

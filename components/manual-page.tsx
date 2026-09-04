@@ -64,9 +64,12 @@ import {
   OutputVisual,
   ReactInfographicAtlas,
 } from '@/components/manual-visuals';
+import { FullGraphVisual, hasFullGraphVisual } from '@/components/full-graph-visuals';
+import { ManualNodeIndex } from '@/components/manual-node-index';
 import {
   type Chapter,
   type EvidenceStatus,
+  type ManualCategory,
   diagnosticChecklist,
   downloadResources,
   manualChapters,
@@ -117,7 +120,9 @@ function ThemeToggle() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
-    const stored = window.localStorage.getItem('ppl-manual-theme');
+    const stored =
+      window.localStorage.getItem('epspoziciya-manual-theme') ??
+      window.localStorage.getItem('ppl-manual-theme');
     const preferred =
       stored === 'dark' || stored === 'light'
         ? stored
@@ -132,7 +137,7 @@ function ThemeToggle() {
     const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
     document.documentElement.dataset.theme = next;
-    window.localStorage.setItem('ppl-manual-theme', next);
+    window.localStorage.setItem('epspoziciya-manual-theme', next);
   }
 
   return (
@@ -481,7 +486,9 @@ function ChecklistPanel() {
   const [checked, setChecked] = useState<string[]>([]);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem('ppl-manual-checklist');
+    const saved =
+      window.localStorage.getItem('epspoziciya-manual-checklist') ??
+      window.localStorage.getItem('ppl-manual-checklist');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -515,8 +522,8 @@ function ChecklistPanel() {
       void Promise.resolve(
         context.registerTool(
           {
-            name: 'set_people_ppl_checklist',
-            title: 'Обновить PEOPLE / PPL checklist',
+            name: 'set_epspoziciya_workflow_checklist',
+            title: 'Обновить EPSPOZICIYA workflow checklist',
             description:
               'Заменяет отмеченные пункты диагностического чек-листа на видимой странице. Передайте массив ID; пустой массив сбрасывает прогресс.',
             inputSchema: {
@@ -546,7 +553,7 @@ function ChecklistPanel() {
               }
               const next = [...new Set(value.completedIds as string[])];
               setChecked(next);
-              window.localStorage.setItem('ppl-manual-checklist', JSON.stringify(next));
+              window.localStorage.setItem('epspoziciya-manual-checklist', JSON.stringify(next));
               return {
                 completedIds: next,
                 completedCount: next.length,
@@ -568,11 +575,12 @@ function ChecklistPanel() {
   function update(id: string, value: boolean) {
     const next = value ? [...new Set([...checked, id])] : checked.filter((item) => item !== id);
     setChecked(next);
-    window.localStorage.setItem('ppl-manual-checklist', JSON.stringify(next));
+    window.localStorage.setItem('epspoziciya-manual-checklist', JSON.stringify(next));
   }
 
   function reset() {
     setChecked([]);
+    window.localStorage.removeItem('epspoziciya-manual-checklist');
     window.localStorage.removeItem('ppl-manual-checklist');
   }
 
@@ -588,7 +596,7 @@ function ChecklistPanel() {
         </Button>
       </div>
       <Progress value={percent} className="manual-progress">
-        <ProgressLabel>Готовность ветки</ProgressLabel>
+        <ProgressLabel>Готовность workflow</ProgressLabel>
         <span className="progress-value">{percent}%</span>
       </Progress>
       <div className="checklist-list">
@@ -618,6 +626,21 @@ function ChecklistPanel() {
 }
 
 function ResourcesVisual() {
+  const graphMaps = [
+    {
+      title: 'HANSEN_MASTER_MAP.svg',
+      href: `${sourceRoot}/HANSEN_MASTER_MAP.svg`,
+      alt: 'Graphviz-карта полной архитектуры Epspoziciya Archviz workflow',
+      meta: 'FULL WORKFLOW · 252 NODES',
+    },
+    {
+      title: 'PEOPLE_PPL_ROUTE.svg',
+      href: `${sourceRoot}/PEOPLE_PPL_ROUTE.svg`,
+      alt: 'Graphviz-карта PEOPLE / PPL route',
+      meta: 'MODULE DETAIL · PEOPLE / PPL',
+    },
+  ];
+
   return (
     <div className="resources-stack">
       <section className="resource-block">
@@ -664,32 +687,42 @@ function ResourcesVisual() {
           ))}
         </div>
       </section>
-      <section className="map-preview">
-        <div className="resource-heading">
-          <div><span className="micro-label">GRAPHVIZ MAP</span><h2>PEOPLE_PPL_ROUTE.svg</h2></div>
-          <a href={withBasePath(`${sourceRoot}/PEOPLE_PPL_ROUTE.svg`)} target="_blank" rel="noreferrer">
-            Открыть SVG <ExternalLink size={15} />
-          </a>
-        </div>
-        <div className="svg-frame">
-          <Image
-            src={withBasePath(`${sourceRoot}/PEOPLE_PPL_ROUTE.svg`)}
-            alt="Graphviz-карта PEOPLE / PPL route"
-            width={1600}
-            height={900}
-            unoptimized
-          />
-        </div>
-      </section>
+      <div className="graph-map-stack">
+        {graphMaps.map((map) => (
+          <section className="map-preview" key={map.href}>
+            <div className="resource-heading">
+              <div><span className="micro-label">{map.meta}</span><h2>{map.title}</h2></div>
+              <a href={withBasePath(map.href)} target="_blank" rel="noreferrer">
+                Открыть SVG <ExternalLink size={15} />
+              </a>
+            </div>
+            <div className="svg-frame">
+              <Image
+                src={withBasePath(map.href)}
+                alt={map.alt}
+                width={1600}
+                height={900}
+                unoptimized
+              />
+            </div>
+          </section>
+        ))}
+      </div>
       <LegacyInfographicDownloads />
     </div>
   );
 }
 
 function ChapterVisual({ chapter }: { chapter: Chapter }) {
+  if (hasFullGraphVisual(chapter.slug)) {
+    return <FullGraphVisual slug={chapter.slug} />;
+  }
+
+  if (chapter.slug === 'people-ppl-overview') {
+    return <OverviewVisual />;
+  }
+
   switch (chapter.visual) {
-    case 'overview':
-      return <OverviewVisual />;
     case 'prompt':
       return <PromptVisual />;
     case 'generation':
@@ -784,38 +817,52 @@ function ArticleSections({ chapter }: { chapter: Chapter }) {
 
 // Full-document links are intentional: GitHub Pages serves the exported HTML files,
 // while Vinext's client-side RSC navigation requires a runtime endpoint.
+const categoryLabels: Record<ManualCategory, string> = {
+  foundation: 'FOUNDATION',
+  'base-generation': 'BASE GENERATION',
+  'people-ppl': 'PEOPLE / PPL · MODULE',
+  'final-pipeline': 'FINAL PIPELINE',
+  'evidence-reference': 'EVIDENCE & REFERENCE',
+};
+
+const categoryOrder = Object.keys(categoryLabels) as ManualCategory[];
+
 function SideNavigation({ activeSlug }: { activeSlug: string }) {
   return (
     <Sidebar className="manual-sidebar" collapsible="offcanvas">
       <SidebarHeader className="manual-sidebar-header">
         <a className="brand" href={withBasePath('/overview')}>
-          <span className="brand-mark">PPL</span>
+          <span className="brand-mark">EPS</span>
           <span className="brand-copy">
-            <strong>Hansen Manual</strong>
-            <small>Technical field guide</small>
+            <strong>EPSPOZICIYA ARCHVIZ</strong>
+            <small>Technical workflow manual</small>
           </span>
         </a>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="manual-sidebar-label">PEOPLE / PPL · {manualChapters.length} CHAPTERS</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {manualChapters.map((item) => (
-                <SidebarMenuItem key={item.slug}>
-                  <SidebarMenuButton
-                    className="manual-menu-button"
-                    isActive={item.slug === activeSlug}
-                    render={<a href={withBasePath(`/${item.slug}`)} aria-label={item.navTitle} />}
-                  >
-                    <span className="menu-index">{String(item.index).padStart(2, '0')}</span>
-                    <span>{item.navTitle}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {categoryOrder.map((category) => (
+          <SidebarGroup className="manual-sidebar-category" key={category}>
+            <SidebarGroupLabel className="manual-sidebar-label">
+              {categoryLabels[category]}
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {manualChapters.filter((item) => item.category === category).map((item) => (
+                  <SidebarMenuItem key={item.slug}>
+                    <SidebarMenuButton
+                      className="manual-menu-button"
+                      isActive={item.slug === activeSlug}
+                      render={<a href={withBasePath(`/${item.slug}`)} aria-label={item.navTitle} />}
+                    >
+                      <span className="menu-index">{String(item.index).padStart(2, '0')}</span>
+                      <span>{item.navTitle}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
       <SidebarFooter className="manual-sidebar-footer">
         <div className="source-card">
@@ -872,7 +919,7 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
         <header className="manual-topbar">
           <div className="topbar-left">
             <SidebarTrigger className="sidebar-trigger" />
-            <a className="mobile-brand" href={withBasePath('/overview')}><span>PPL</span> Hansen Manual</a>
+            <a className="mobile-brand" href={withBasePath('/overview')}><span>EPS</span> Technical Manual</a>
           </div>
           <div className="topbar-progress" aria-label={`Раздел ${pageIndex + 1} из ${manualChapters.length}`}>
             <span>{String(pageIndex + 1).padStart(2, '0')} / {manualChapters.length}</span>
@@ -888,9 +935,9 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
           <article className="manual-article">
             <Breadcrumb className="manual-breadcrumb">
               <BreadcrumbList>
-                <BreadcrumbItem><BreadcrumbLink render={<a href={withBasePath('/overview')} aria-label="Manual" />}>Manual</BreadcrumbLink></BreadcrumbItem>
+                <BreadcrumbItem><BreadcrumbLink render={<a href={withBasePath('/overview')} aria-label="Epspoziciya Archviz" />}>Epspoziciya Archviz</BreadcrumbLink></BreadcrumbItem>
                 <BreadcrumbSeparator />
-                <BreadcrumbItem><BreadcrumbLink render={<a href={withBasePath('/overview')} aria-label="PEOPLE / PPL" />}>PEOPLE / PPL</BreadcrumbLink></BreadcrumbItem>
+                <BreadcrumbItem><BreadcrumbLink render={<a href={withBasePath(`/${chapter.slug}`)} aria-label={categoryLabels[chapter.category]} />}>{categoryLabels[chapter.category]}</BreadcrumbLink></BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem><BreadcrumbPage>{chapter.navTitle}</BreadcrumbPage></BreadcrumbItem>
               </BreadcrumbList>
@@ -913,6 +960,8 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
 
             <ArticleSections chapter={chapter} />
 
+            {chapter.slug === 'node-index' && <ManualNodeIndex />}
+
             {chapter.slug === 'resources' && (
               <section className="evidence-gallery">
                 <header className="manual-section-head">
@@ -923,13 +972,13 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
                   <a href={withBasePath('/assets/evidence/build-summary-252-nodes.png')} target="_blank" rel="noreferrer">
                     <Image
                       src={withBasePath('/assets/evidence/build-summary-252-nodes.png')}
-                      alt="Сводка: 252 nodes, 341 links, 28 controls, 22 файла"
+                      alt="Сводка исходного пакета: 252 nodes, 341 links, 28 controls, 22 файла до errata и manifest"
                       width={986}
                       height={743}
                       loading="lazy"
                       unoptimized
                     />
-                    <span>22 files · 252 nodes · 341 links</span>
+                    <span>Original audit: 22 files · current bundle: 24</span>
                   </a>
                   <a href={withBasePath('/assets/evidence/source-of-truth-confirmation.png')} target="_blank" rel="noreferrer">
                     <Image
