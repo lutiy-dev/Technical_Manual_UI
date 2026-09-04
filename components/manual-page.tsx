@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import {
   ArrowLeft,
   ArrowRight,
@@ -783,17 +782,19 @@ function ArticleSections({ chapter }: { chapter: Chapter }) {
   );
 }
 
+// Full-document links are intentional: GitHub Pages serves the exported HTML files,
+// while Vinext's client-side RSC navigation requires a runtime endpoint.
 function SideNavigation({ activeSlug }: { activeSlug: string }) {
   return (
     <Sidebar className="manual-sidebar" collapsible="offcanvas">
       <SidebarHeader className="manual-sidebar-header">
-        <Link className="brand" href={withBasePath('/overview')}>
+        <a className="brand" href={withBasePath('/overview')}>
           <span className="brand-mark">PPL</span>
           <span className="brand-copy">
             <strong>Hansen Manual</strong>
             <small>Technical field guide</small>
           </span>
-        </Link>
+        </a>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -805,7 +806,7 @@ function SideNavigation({ activeSlug }: { activeSlug: string }) {
                   <SidebarMenuButton
                     className="manual-menu-button"
                     isActive={item.slug === activeSlug}
-                    render={<Link href={withBasePath(`/${item.slug}`)} aria-label={item.navTitle} />}
+                    render={<a href={withBasePath(`/${item.slug}`)} aria-label={item.navTitle} />}
                   >
                     <span className="menu-index">{String(item.index).padStart(2, '0')}</span>
                     <span>{item.navTitle}</span>
@@ -821,9 +822,9 @@ function SideNavigation({ activeSlug }: { activeSlug: string }) {
           <span className="micro-label">SOURCE OF TRUTH</span>
           <strong>252 nodes · 341 links</strong>
           <p>Epspoziciya_archviz_ph_sdxlflux_v001.json</p>
-          <Link href={withBasePath('/resources')}>
+          <a href={withBasePath('/resources')}>
             Исходные файлы <ArrowRight size={14} />
-          </Link>
+          </a>
         </div>
       </SidebarFooter>
       <SidebarRail />
@@ -871,14 +872,14 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
         <header className="manual-topbar">
           <div className="topbar-left">
             <SidebarTrigger className="sidebar-trigger" />
-            <Link className="mobile-brand" href={withBasePath('/overview')}><span>PPL</span> Hansen Manual</Link>
+            <a className="mobile-brand" href={withBasePath('/overview')}><span>PPL</span> Hansen Manual</a>
           </div>
           <div className="topbar-progress" aria-label={`Раздел ${pageIndex + 1} из ${manualChapters.length}`}>
             <span>{String(pageIndex + 1).padStart(2, '0')} / {manualChapters.length}</span>
             <i><b style={{ width: `${pageProgress}%` }} /></i>
           </div>
           <div className="topbar-actions">
-            <Link className="topbar-resource-link" href={withBasePath('/resources')}><FileArchive size={16} /> Файлы</Link>
+            <a className="topbar-resource-link" href={withBasePath('/resources')}><FileArchive size={16} /> Файлы</a>
             <ThemeToggle />
           </div>
         </header>
@@ -887,9 +888,9 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
           <article className="manual-article">
             <Breadcrumb className="manual-breadcrumb">
               <BreadcrumbList>
-                <BreadcrumbItem><BreadcrumbLink render={<Link href={withBasePath('/overview')} aria-label="Manual" />}>Manual</BreadcrumbLink></BreadcrumbItem>
+                <BreadcrumbItem><BreadcrumbLink render={<a href={withBasePath('/overview')} aria-label="Manual" />}>Manual</BreadcrumbLink></BreadcrumbItem>
                 <BreadcrumbSeparator />
-                <BreadcrumbItem><BreadcrumbLink render={<Link href={withBasePath('/overview')} aria-label="PEOPLE / PPL" />}>PEOPLE / PPL</BreadcrumbLink></BreadcrumbItem>
+                <BreadcrumbItem><BreadcrumbLink render={<a href={withBasePath('/overview')} aria-label="PEOPLE / PPL" />}>PEOPLE / PPL</BreadcrumbLink></BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem><BreadcrumbPage>{chapter.navTitle}</BreadcrumbPage></BreadcrumbItem>
               </BreadcrumbList>
@@ -947,21 +948,21 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
 
             <nav className="chapter-navigation" aria-label="Переход между разделами">
               {previous ? (
-                <Link className="chapter-nav-link previous" href={withBasePath(`/${previous.slug}`)}>
+                <a className="chapter-nav-link previous" href={withBasePath(`/${previous.slug}`)}>
                   <ArrowLeft />
                   <span><small>PREVIOUS</small><strong>{previous.navTitle}</strong></span>
-                </Link>
+                </a>
               ) : <span />}
               {next ? (
-                <Link className="chapter-nav-link next" href={withBasePath(`/${next.slug}`)}>
+                <a className="chapter-nav-link next" href={withBasePath(`/${next.slug}`)}>
                   <span><small>NEXT</small><strong>{next.navTitle}</strong></span>
                   <ArrowRight />
-                </Link>
+                </a>
               ) : (
-                <Link className="chapter-nav-link next" href={withBasePath('/overview')}>
+                <a className="chapter-nav-link next" href={withBasePath('/overview')}>
                   <span><small>BACK TO</small><strong>Overview</strong></span>
                   <Workflow />
-                </Link>
+                </a>
               )}
             </nav>
           </article>
