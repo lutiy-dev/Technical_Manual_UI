@@ -11,7 +11,7 @@ Diagnostics, Checklist, Examples и Resources.
 
 После первой успешной публикации GitHub Pages учебник будет доступен по адресу:
 
-<https://lutiy-dev.github.io/people-ppl-hansen-manual/>
+<https://lutiy-dev.github.io/Technical_Manual_UI/>
 
 ## Локальный запуск
 

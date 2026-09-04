@@ -1,11 +1,11 @@
 {
-  "name": "people-ppl-hansen-manual",
+  "name": "technical-manual-ui",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://lutiy-dev.github.io/people-ppl-hansen-manual/",
+  "homepage": "https://lutiy-dev.github.io/Technical_Manual_UI/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lutiy-dev/people-ppl-hansen-manual.git"
+    "url": "https://github.com/lutiy-dev/Technical_Manual_UI.git"
   },
   "engines": {
     "node": ">=22.13.0"
