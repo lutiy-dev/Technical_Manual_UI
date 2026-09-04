@@ -1,7 +1,12 @@
 {
-  "name": "sites-project",
+  "name": "people-ppl-hansen-manual",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://lutiy-dev.github.io/people-ppl-hansen-manual/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lutiy-dev/people-ppl-hansen-manual.git"
+  },
   "engines": {
     "node": ">=22.13.0"
   },

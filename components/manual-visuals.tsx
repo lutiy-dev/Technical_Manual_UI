@@ -39,6 +39,7 @@ import {
   outputSaveProfiles,
 } from '@/lib/output-data';
 import type { EvidenceStatus } from '@/lib/manual-data';
+import { withBasePath } from '@/lib/site-path';
 
 const evidenceLabels: Record<EvidenceStatus, string> = {
   confirmed: 'CONFIRMED',
@@ -116,7 +117,7 @@ function OutputExampleGallery({ compact = false }: { compact?: boolean }) {
         <article className="output-example-card" key={asset.id}>
           <div className="output-example-image">
             <Image
-              src={asset.src}
+              src={withBasePath(asset.src)}
               alt={asset.alt}
               width={960}
               height={720}
@@ -596,8 +597,8 @@ export function LegacyInfographicDownloads() {
       <p className="legacy-intro">Основной учебник пересобран в React. Эти raster-страницы оставлены только как исходный визуальный reference и доступны для скачивания.</p>
       <div className="legacy-download-grid">
         {legacyInfographics.map((asset) => (
-          <a href={asset.src} download key={asset.src}>
-            <Image src={asset.src} alt={asset.title} width={1055} height={1491} loading="lazy" unoptimized />
+          <a href={withBasePath(asset.src)} download key={asset.src}>
+            <Image src={withBasePath(asset.src)} alt={asset.title} width={1055} height={1491} loading="lazy" unoptimized />
             <span><small>PAGE {asset.page}</small><strong>{asset.title}</strong><code>{asset.sourcePath}</code></span>
           </a>
         ))}

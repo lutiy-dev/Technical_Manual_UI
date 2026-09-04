@@ -74,6 +74,7 @@ import {
   sourceRoot,
   upstreamResources,
 } from '@/lib/manual-data';
+import { withBasePath } from '@/lib/site-path';
 
 const statusCopy: Record<
   EvidenceStatus,
@@ -652,7 +653,7 @@ function ResourcesVisual() {
         </div>
         <div className="download-grid">
           {downloadResources.map((resource) => (
-            <a className="download-card" href={resource.href} download key={resource.href}>
+            <a className="download-card" href={withBasePath(resource.href)} download key={resource.href}>
               <FileCode2 size={20} />
               <span>
                 <small>{resource.meta}</small>
@@ -667,13 +668,13 @@ function ResourcesVisual() {
       <section className="map-preview">
         <div className="resource-heading">
           <div><span className="micro-label">GRAPHVIZ MAP</span><h2>PEOPLE_PPL_ROUTE.svg</h2></div>
-          <a href={`${sourceRoot}/PEOPLE_PPL_ROUTE.svg`} target="_blank" rel="noreferrer">
+          <a href={withBasePath(`${sourceRoot}/PEOPLE_PPL_ROUTE.svg`)} target="_blank" rel="noreferrer">
             Открыть SVG <ExternalLink size={15} />
           </a>
         </div>
         <div className="svg-frame">
           <Image
-            src={`${sourceRoot}/PEOPLE_PPL_ROUTE.svg`}
+            src={withBasePath(`${sourceRoot}/PEOPLE_PPL_ROUTE.svg`)}
             alt="Graphviz-карта PEOPLE / PPL route"
             width={1600}
             height={900}
@@ -786,7 +787,7 @@ function SideNavigation({ activeSlug }: { activeSlug: string }) {
   return (
     <Sidebar className="manual-sidebar" collapsible="offcanvas">
       <SidebarHeader className="manual-sidebar-header">
-        <Link className="brand" href="/overview">
+        <Link className="brand" href={withBasePath('/overview')}>
           <span className="brand-mark">PPL</span>
           <span className="brand-copy">
             <strong>Hansen Manual</strong>
@@ -804,7 +805,7 @@ function SideNavigation({ activeSlug }: { activeSlug: string }) {
                   <SidebarMenuButton
                     className="manual-menu-button"
                     isActive={item.slug === activeSlug}
-                    render={<Link href={`/${item.slug}`} aria-label={item.navTitle} />}
+                    render={<Link href={withBasePath(`/${item.slug}`)} aria-label={item.navTitle} />}
                   >
                     <span className="menu-index">{String(item.index).padStart(2, '0')}</span>
                     <span>{item.navTitle}</span>
@@ -820,7 +821,7 @@ function SideNavigation({ activeSlug }: { activeSlug: string }) {
           <span className="micro-label">SOURCE OF TRUTH</span>
           <strong>252 nodes · 341 links</strong>
           <p>Epspoziciya_archviz_ph_sdxlflux_v001.json</p>
-          <Link href="/resources">
+          <Link href={withBasePath('/resources')}>
             Исходные файлы <ArrowRight size={14} />
           </Link>
         </div>
@@ -870,14 +871,14 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
         <header className="manual-topbar">
           <div className="topbar-left">
             <SidebarTrigger className="sidebar-trigger" />
-            <Link className="mobile-brand" href="/overview"><span>PPL</span> Hansen Manual</Link>
+            <Link className="mobile-brand" href={withBasePath('/overview')}><span>PPL</span> Hansen Manual</Link>
           </div>
           <div className="topbar-progress" aria-label={`Раздел ${pageIndex + 1} из ${manualChapters.length}`}>
             <span>{String(pageIndex + 1).padStart(2, '0')} / {manualChapters.length}</span>
             <i><b style={{ width: `${pageProgress}%` }} /></i>
           </div>
           <div className="topbar-actions">
-            <Link className="topbar-resource-link" href="/resources"><FileArchive size={16} /> Файлы</Link>
+            <Link className="topbar-resource-link" href={withBasePath('/resources')}><FileArchive size={16} /> Файлы</Link>
             <ThemeToggle />
           </div>
         </header>
@@ -886,9 +887,9 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
           <article className="manual-article">
             <Breadcrumb className="manual-breadcrumb">
               <BreadcrumbList>
-                <BreadcrumbItem><BreadcrumbLink render={<Link href="/overview" aria-label="Manual" />}>Manual</BreadcrumbLink></BreadcrumbItem>
+                <BreadcrumbItem><BreadcrumbLink render={<Link href={withBasePath('/overview')} aria-label="Manual" />}>Manual</BreadcrumbLink></BreadcrumbItem>
                 <BreadcrumbSeparator />
-                <BreadcrumbItem><BreadcrumbLink render={<Link href="/overview" aria-label="PEOPLE / PPL" />}>PEOPLE / PPL</BreadcrumbLink></BreadcrumbItem>
+                <BreadcrumbItem><BreadcrumbLink render={<Link href={withBasePath('/overview')} aria-label="PEOPLE / PPL" />}>PEOPLE / PPL</BreadcrumbLink></BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem><BreadcrumbPage>{chapter.navTitle}</BreadcrumbPage></BreadcrumbItem>
               </BreadcrumbList>
@@ -918,9 +919,9 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
                   <h2>Подтверждение source package</h2>
                 </header>
                 <div className="evidence-images">
-                  <a href="/assets/evidence/build-summary-252-nodes.png" target="_blank" rel="noreferrer">
+                  <a href={withBasePath('/assets/evidence/build-summary-252-nodes.png')} target="_blank" rel="noreferrer">
                     <Image
-                      src="/assets/evidence/build-summary-252-nodes.png"
+                      src={withBasePath('/assets/evidence/build-summary-252-nodes.png')}
                       alt="Сводка: 252 nodes, 341 links, 28 controls, 22 файла"
                       width={986}
                       height={743}
@@ -929,9 +930,9 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
                     />
                     <span>22 files · 252 nodes · 341 links</span>
                   </a>
-                  <a href="/assets/evidence/source-of-truth-confirmation.png" target="_blank" rel="noreferrer">
+                  <a href={withBasePath('/assets/evidence/source-of-truth-confirmation.png')} target="_blank" rel="noreferrer">
                     <Image
-                      src="/assets/evidence/source-of-truth-confirmation.png"
+                      src={withBasePath('/assets/evidence/source-of-truth-confirmation.png')}
                       alt="Подтверждение source of truth workflow"
                       width={993}
                       height={743}
@@ -946,18 +947,18 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
 
             <nav className="chapter-navigation" aria-label="Переход между разделами">
               {previous ? (
-                <Link className="chapter-nav-link previous" href={`/${previous.slug}`}>
+                <Link className="chapter-nav-link previous" href={withBasePath(`/${previous.slug}`)}>
                   <ArrowLeft />
                   <span><small>PREVIOUS</small><strong>{previous.navTitle}</strong></span>
                 </Link>
               ) : <span />}
               {next ? (
-                <Link className="chapter-nav-link next" href={`/${next.slug}`}>
+                <Link className="chapter-nav-link next" href={withBasePath(`/${next.slug}`)}>
                   <span><small>NEXT</small><strong>{next.navTitle}</strong></span>
                   <ArrowRight />
                 </Link>
               ) : (
-                <Link className="chapter-nav-link next" href="/overview">
+                <Link className="chapter-nav-link next" href={withBasePath('/overview')}>
                   <span><small>BACK TO</small><strong>Overview</strong></span>
                   <Workflow />
                 </Link>

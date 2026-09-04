@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  'https://people-ppl-hansen-manual.ogorkov.chatgpt.site';
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://people-ppl-hansen-manual.cream-myna-8707.chatgpt.site'),
+  metadataBase: new URL(siteUrl),
   title: 'PEOPLE / PPL — Hansen Technical Manual',
   description:
     'Интерактивный технический учебник по PEOPLE/PPL ветке Epspoziciya_archviz_ph_sdxlflux_v001.',
