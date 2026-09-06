@@ -312,6 +312,11 @@ export const baseGenerationChapters: Chapter[] = [
         title: 'Florence2 coordinates управляют SAM2 single-image model',
         paragraphs: [
           'Florence2Run 550 получает resized source 780 и модель 112. Coordinates 114 поступают в SAM2 115 вместе с single-image model 107. GrowMask 144 расширяет область на 5 px, MaskBlur+ 146 создаёт мягкий край 10/auto.',
+          'Подтверждено runtime-тестом: detection и SAM2 обязаны получать один и тот же image/canvas. Для нескольких Florence2 BBOX локальная версия Sam2Segmentation требует individual_objects = ON; при OFF в тесте сохранялся только один силуэт.',
+        ],
+        facts: [
+          { status: 'confirmed', title: 'Multi-person runtime', text: 'На source 1280 × 720 индексы 0–5 и individual_objects ON дали объединённую маску шести людей.' },
+          { status: 'not-confirmed', title: 'Production composite', text: 'Runtime-тест подтверждает mask chain отдельно; downstream positioning и composite проверяются следующими probes.' },
         ],
       },
       {

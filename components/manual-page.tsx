@@ -315,7 +315,7 @@ function MaskVisual() {
           { id: '780', label: 'Resize', sub: '1920 × 1920' },
           { id: '550', label: 'Florence2', sub: 'detect classes' },
           { id: '114', label: 'Coordinates', sub: 'bbox → points' },
-          { id: '115', label: 'SAM2', sub: 'individual objects' },
+          { id: '115', label: 'SAM2', sub: 'multi-BBOX · objects ON' },
           { id: '144', label: 'Grow', sub: '+5 px' },
           { id: '146', label: 'Blur', sub: '10 · auto' },
           { id: '420', label: 'Crop', sub: 'person region' },

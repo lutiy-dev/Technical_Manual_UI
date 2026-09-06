@@ -295,8 +295,39 @@ const existingChapters = ([
         },
       },
       {
+        id: 'runtime-multi-bbox',
+        eyebrow: '03 · CONFIRMED RUNTIME',
+        title: 'Один canvas и individual_objects = ON дают маску всей группы',
+        paragraphs: [
+          'Runtime-проверка 2026-09-07 подтвердила полный маршрут Florence2 → BBOX → SAM2 на тестовом изображении 1280 × 720 с шестью людьми. Florence2 и SAM2 должны получать один и тот же image: координаты, рассчитанные на другом размере или кадре, приводят к смещённой либо ложной маске.',
+          'В установленной версии ComfyUI-segment-anything-2 список BBOX 0,1,2,3,4,5 дал маску всей группы только при individual_objects = ON. При OFF узел возвращал один силуэт, хотя Florence2 показывал рамки всех людей.',
+        ],
+        table: {
+          columns: ['Проверка', 'Подтверждённое значение', 'Симптом ошибки'],
+          rows: [
+            ['Image contract', 'Florence2 image = SAM2 image = 1280 × 720', 'Маска здания, угла или пустой области'],
+            ['Florence generation', 'num_beams 3 · do_sample OFF', 'Нестабильные рамки и меняющиеся индексы'],
+            ['BBOX selection', 'index 0,1,2,3,4,5', 'Выбран только один или не тот объект'],
+            ['SAM2 multi-object', 'individual_objects ON', 'При OFF остаётся один силуэт'],
+            ['Mask cleanup', 'Threshold 0.30 в тесте', 'Порог уточняется по краям одежды и конечностей'],
+          ],
+        },
+        facts: [
+          {
+            status: 'confirmed',
+            title: 'Six-person mask',
+            text: 'Получены объединённая foreground-маска всей группы и корректная инвертированная protect-mask.',
+          },
+          {
+            status: 'not-confirmed',
+            title: 'Final scene composite',
+            text: 'Тест подтверждает detection/segmentation, но ещё не доказывает прохождение cutout через positioning, selector и final output.',
+          },
+        ],
+      },
+      {
         id: 'mask-quality',
-        eyebrow: '03 · VISUAL QA',
+        eyebrow: '04 · VISUAL QA',
         title: 'Что считается рабочей маской',
         bullets: [
           'Белый силуэт закрывает всю фигуру, включая ноги и мелкие предметы, которые должны остаться.',
@@ -562,6 +593,8 @@ const existingChapters = ([
           columns: ['Последний рабочий этап', 'Что сломано вероятнее', 'Следующий тест'],
           rows: [
             ['Нет людей в 409', 'Prompt / model / sampler', 'Проверить 408 → 831 → 828 → 829'],
+            ['Florence видит все рамки, SAM2 оставляет одного человека', 'Sam2Segmentation multi-BBOX mode', 'Включить individual_objects и повторить с теми же индексами'],
+            ['Mask попадает в здание, угол или пустую область', 'Florence2 и SAM2 получили разные image / canvas', 'Подать один source одинакового размера в detection и segmentation'],
             ['409 работает, mask плохая', '550 / 114 / 115 / 144 / 146', 'Упростить classes и проверить край'],
             ['Mask хорошая, cutout грязный', '420 / 422 / 430', 'Смотреть crop и RemBg outputs'],
             ['Composite есть, 459 не тот', '543 / linked selector inputs', 'Проверить effective value = 1'],

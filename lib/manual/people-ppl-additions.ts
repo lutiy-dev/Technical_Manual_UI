@@ -30,6 +30,7 @@ export const peoplePplAdditions: Chapter[] = [
             ['Prepared cutout', '422 → 477 → 449', 'Cropped person + alpha', 'Image/mask mismatch'],
             ['First paste', '779 + 449 + 451 → 429', 'Selected SDXL scene canvas', 'Scale/location outside frame'],
             ['Alternative return', '509 → 684 → 782 → 685', 'Restored original/resized canvas', 'Wrong mode 693'],
+            ['Runtime mask test', 'Florence2 → BBOX → SAM2', 'Same 1280 × 720 source at both stages', 'Different images reproduce displaced/false masks'],
           ],
         },
       },
@@ -51,6 +52,7 @@ export const peoplePplAdditions: Chapter[] = [
         eyebrow: '03 · QA ORDER',
         title: 'Проверка positioning до поиска ошибки downstream',
         bullets: [
+          'До выбора BBOX доказать, что Florence2 и SAM2 получают один и тот же image одинакового размера.',
           'Сравнить actual dimensions image 829 и resized image 780.',
           'Проверить, что 146 содержит foreground и правильную polarity.',
           'Проверить bounds/crop 420→781: человек полностью внутри области.',
