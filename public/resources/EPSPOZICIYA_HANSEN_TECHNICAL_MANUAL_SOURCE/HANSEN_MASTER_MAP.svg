@@ -6,6 +6,12 @@
 <!-- Title: workflow Pages: 1 -->
 <svg width="3169pt" height="8798pt"
  viewBox="0.00 0.00 3169.00 8798.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="background-color:#10141c">
+<style type="text/css"><![CDATA[
+  :root { background:#10141c; scrollbar-color:#40506a #10141c; scrollbar-width:thin; }
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-track { background:#10141c; }
+  ::-webkit-scrollbar-thumb { background:#40506a; border:2px solid #10141c; border-radius:999px; }
+]]></style>
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 8794)">
 <title>workflow</title>
 <polygon fill="#10141c" stroke="none" points="-4,4 -4,-8794 3165,-8794 3165,4 -4,4"/>

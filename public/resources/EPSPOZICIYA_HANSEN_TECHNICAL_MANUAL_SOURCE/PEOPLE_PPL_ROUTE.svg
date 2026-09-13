@@ -5,7 +5,13 @@
  -->
 <!-- Title: G Pages: 1 -->
 <svg width="1201pt" height="98pt"
- viewBox="0.00 0.00 1201.00 98.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ viewBox="0.00 0.00 1201.00 98.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="background-color:#10141c">
+<style type="text/css"><![CDATA[
+  :root { background:#10141c; scrollbar-color:#40506a #10141c; scrollbar-width:thin; }
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-track { background:#10141c; }
+  ::-webkit-scrollbar-thumb { background:#40506a; border:2px solid #10141c; border-radius:999px; }
+]]></style>
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 94)">
 <title>G</title>
 <polygon fill="#10141c" stroke="none" points="-4,4 -4,-94 1197.25,-94 1197.25,4 -4,4"/>
