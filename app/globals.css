@@ -39,6 +39,7 @@
 
 :root {
   color-scheme: dark;
+  --master-map-background: #10141c;
   --background: #0b0d10;
   --foreground: #f5f4ef;
   --card: #14171b;
@@ -185,6 +186,26 @@ html {
   background: var(--background);
   scroll-behavior: smooth;
   scroll-padding-top: 94px;
+  scrollbar-color: var(--border) var(--background);
+}
+
+html::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+html::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+html::-webkit-scrollbar-thumb {
+  border: 3px solid var(--background);
+  border-radius: 999px;
+  background: var(--border);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--text-faint);
 }
 
 body {
@@ -1529,7 +1550,8 @@ button, input {
   overflow: auto;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #fff;
+  background: var(--master-map-background);
+  scrollbar-color: var(--border) var(--master-map-background);
 }
 
 .svg-frame img {
@@ -1537,6 +1559,7 @@ button, input {
   width: 100%;
   min-width: 760px;
   height: auto;
+  background: var(--master-map-background);
 }
 
 .article-sections {
