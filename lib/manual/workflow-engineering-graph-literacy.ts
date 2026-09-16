@@ -20,6 +20,7 @@ export const workflowEngineeringGraphLiteracyChapters: Chapter[] = [
       'workflow-engineering-overview',
       'graph-reading',
       'control-panel',
+      'workflow-engineering-base-config',
     ],
     sections: [
       {

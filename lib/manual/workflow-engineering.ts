@@ -18,6 +18,7 @@ export const workflowEngineeringChapters: Chapter[] = [
     relatedChapters: [
       'workflow-engineering-node-literacy',
       'workflow-engineering-graph-literacy',
+      'workflow-engineering-base-config',
       'graph-reading',
       'inputs',
       'control-panel',

@@ -4,7 +4,7 @@
 `Epspoziciya_archviz_ph_sdxlflux_v001`. PEOPLE/PPL сохранён как отдельный
 учебный модуль внутри общей архитектуры.
 
-Сайт разбит на 32 отдельных маршрута, объединённых в шесть групп:
+Сайт разбит на 33 отдельных маршрута, объединённых в шесть групп:
 Workflow Engineering, Foundation, Base Generation, PEOPLE/PPL Module, Final Pipeline и Evidence &
 Reference. В руководство входят полная архитектура, правила чтения графа,
 inputs, 28 controls, модели, prompts, SDXL, ControlNet, IPAdapter/LoRA, четыре

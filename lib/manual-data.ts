@@ -1066,6 +1066,7 @@ export const manualChapters: Chapter[] = [
   additionalChapter('workflow-engineering-overview'),
   additionalChapter('workflow-engineering-node-literacy'),
   additionalChapter('workflow-engineering-graph-literacy'),
+  additionalChapter('workflow-engineering-base-config'),
   additionalChapter('overview'),
   additionalChapter('graph-reading'),
   additionalChapter('inputs'),
