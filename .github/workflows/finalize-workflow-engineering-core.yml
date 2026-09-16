@@ -1,0 +1,106 @@
+name: Finalize Workflow Engineering core chapters
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/finalize-workflow-engineering-core.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Wire core routes
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          p = Path('lib/manual-data.ts')
+          text = p.read_text(encoding='utf-8')
+
+          # Normalize Workflow Engineering order before Hansen/Foundation.
+          start = "export const manualChapters: Chapter[] = [\n"
+          if start not in text:
+              raise SystemExit('manualChapters start not found')
+
+          desired = (
+              "export const manualChapters: Chapter[] = [\n"
+              "  additionalChapter('workflow-engineering-overview'),\n"
+              "  additionalChapter('workflow-engineering-node-literacy'),\n"
+              "  additionalChapter('workflow-engineering-graph-literacy'),\n"
+              "  additionalChapter('workflow-engineering-base-config'),\n"
+              "  additionalChapter('workflow-engineering-data-control-plane'),\n"
+              "  additionalChapter('workflow-engineering-module-contracts'),\n"
+          )
+
+          # Replace whatever current Workflow Engineering prefix exists up to Hansen overview.
+          pattern = (
+              r"export const manualChapters: Chapter\[\] = \[\n"
+              r"(?:  additionalChapter\('workflow-engineering-[^']+'\),\n)+"
+          )
+          if re.search(pattern, text):
+              text = re.sub(pattern, desired, text, count=1)
+          else:
+              text = text.replace(start, desired, 1)
+
+          p.write_text(text, encoding='utf-8')
+
+          # Cross-links.
+          p = Path('lib/manual/workflow-engineering-data-control-plane.ts')
+          text = p.read_text(encoding='utf-8')
+          if "      'workflow-engineering-module-contracts'," not in text:
+              text = text.replace(
+                  "      'inputs',\n",
+                  "      'inputs',\n      'workflow-engineering-module-contracts',\n",
+                  1,
+              )
+          p.write_text(text, encoding='utf-8')
+
+          p = Path('lib/manual/workflow-engineering-base-config.ts')
+          text = p.read_text(encoding='utf-8')
+          if "      'workflow-engineering-data-control-plane'," not in text:
+              text = text.replace(
+                  "      'models-dependencies',\n",
+                  "      'models-dependencies',\n      'workflow-engineering-data-control-plane',\n",
+                  1,
+              )
+          p.write_text(text, encoding='utf-8')
+
+          p = Path('README.md')
+          text = p.read_text(encoding='utf-8')
+          text = re.sub(
+              r'Сайт разбит на \d+ (?:отдельных маршрутов|отдельный маршрут|отдельных маршрута)',
+              'Сайт разбит на 35 отдельных маршрутов',
+              text,
+              count=1,
+          )
+          p.write_text(text, encoding='utf-8')
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production build
+        run: npm run build
+
+      - name: Commit core routes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/manual-data.ts lib/manual/workflow-engineering-data-control-plane.ts lib/manual/workflow-engineering-base-config.ts README.md
+          if git diff --cached --quiet; then
+            echo "No patch needed"
+            exit 0
+          fi
+          git commit -m "feat: expose Workflow Engineering core chapters"
+          git pull --rebase origin main
+          git push
