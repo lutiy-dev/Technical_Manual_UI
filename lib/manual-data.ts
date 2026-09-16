@@ -1080,6 +1080,7 @@ export const manualChapters: Chapter[] = [
   existingChapter('segmentation-mask', 'people-ppl', { navTitle: 'PPL Segmentation / Mask' }),
   existingChapter('preparation-color-match', 'people-ppl'),
   additionalChapter('positioning'),
+  additionalChapter('ppl-workflow-02-replace-existing'),
   existingChapter('selector-logic', 'people-ppl', {
     sections: [...existingChapterMap['selector-logic'].sections, selectorTruthSection],
   }),

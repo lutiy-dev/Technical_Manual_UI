@@ -4,7 +4,7 @@
 `Epspoziciya_archviz_ph_sdxlflux_v001`. PEOPLE/PPL сохранён как отдельный
 учебный модуль внутри общей архитектуры.
 
-Сайт разбит на 28 отдельных маршрутов, объединённых в пять групп:
+Сайт разбит на 29 отдельных маршрутов, объединённых в пять групп:
 Foundation, Base Generation, PEOPLE/PPL Module, Final Pipeline и Evidence &
 Reference. В руководство входят полная архитектура, правила чтения графа,
 inputs, 28 controls, модели, prompts, SDXL, ControlNet, IPAdapter/LoRA, четыре
@@ -42,3 +42,8 @@ npm run build
 
 Исходные материалы и права на них остаются у соответствующих владельцев.
 Открытая лицензия к репозиторию намеренно не добавлена.
+
+
+## Правило обновления учебника
+
+При добавлении новой главы недостаточно изменить только `lib/manual/*.ts`. Обновление считается завершённым только после цепочки: `CONTENT → manualChapters → ROUTE → SIDEBAR/COUNTER → BUILD → DEPLOY → VISUAL CHECK`. Полный обязательный чек-лист хранится в [`MAINTENANCE_RULES.md`](./MAINTENANCE_RULES.md).
