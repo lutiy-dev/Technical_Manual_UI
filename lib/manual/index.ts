@@ -7,6 +7,7 @@ import { workflowEngineeringNodeLiteracyChapters } from './workflow-engineering-
 import { workflowEngineeringGraphLiteracyChapters } from './workflow-engineering-graph-literacy';
 import { workflowEngineeringBaseConfigChapters } from './workflow-engineering-base-config';
 import { workflowEngineeringDataControlPlaneChapters } from './workflow-engineering-data-control-plane';
+import { workflowEngineeringModuleContractsChapters } from './workflow-engineering-module-contracts';
 
 export const additionalChapters = [
   ...workflowEngineeringChapters,
@@ -14,6 +15,7 @@ export const additionalChapters = [
   ...workflowEngineeringGraphLiteracyChapters,
   ...workflowEngineeringBaseConfigChapters,
   ...workflowEngineeringDataControlPlaneChapters,
+  ...workflowEngineeringModuleContractsChapters,
   ...foundationChapters,
   ...baseGenerationChapters,
   ...peoplePplAdditions,
@@ -30,4 +32,5 @@ export {
   workflowEngineeringGraphLiteracyChapters,
   workflowEngineeringBaseConfigChapters,
   workflowEngineeringDataControlPlaneChapters,
+  workflowEngineeringModuleContractsChapters,
 };
