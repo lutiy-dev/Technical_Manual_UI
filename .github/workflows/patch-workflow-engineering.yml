@@ -1,0 +1,89 @@
+name: Patch Workflow Engineering overview
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Patch navigation and route order
+        shell: python
+        run: |
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if new in text:
+                  return
+              if old not in text:
+                  raise SystemExit(f'Expected marker not found in {path}: {old!r}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          replace_once(
+              'lib/manual-data.ts',
+              "export const manualChapters: Chapter[] = [\n  additionalChapter('overview'),",
+              "export const manualChapters: Chapter[] = [\n  additionalChapter('workflow-engineering-overview'),\n  additionalChapter('overview'),",
+          )
+
+          replace_once(
+              'components/manual-page.tsx',
+              "const categoryLabels: Record<ManualCategory, string> = {\n  foundation: 'FOUNDATION',",
+              "const categoryLabels: Record<ManualCategory, string> = {\n  'workflow-engineering': 'WORKFLOW ENGINEERING',\n  foundation: 'FOUNDATION',",
+          )
+
+          p = Path('README.md')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace('Сайт разбит на 29 отдельных маршрутов, объединённых в пять групп:', 'Сайт разбит на 30 отдельных маршрутов, объединённых в шесть групп:')
+          text = text.replace('Foundation, Base Generation, PEOPLE/PPL Module, Final Pipeline и Evidence &\nReference.', 'Workflow Engineering, Foundation, Base Generation, PEOPLE/PPL Module, Final Pipeline и Evidence &\nReference.')
+          marker = '## Онлайн-версия\n'
+          block = (
+              '## Архитектура обучения\n\n'
+              'Учебник следует обязательному порядку: **сначала архитектура графа, потом генеративные ноды, потом практика**.\n\n'
+              '1. **Part I · Workflow Engineering for ComfyUI** — Node Literacy, Graph Literacy, BASE CONFIG, control/data plane, modules, contracts, checkpoints и reproducibility.\n'
+              '2. **Part II · Generative Systems** — SDXL, FLUX, ControlNet, Florence2, SAM2, masks, composite и upscale.\n'
+              '3. **Part III · Hansen by Timestamps** — разбор production workflow по таймкодам видео.\n'
+              '4. **Part IV · Practice Labs** — независимые standalone JSON-модули, упражнения и QC.\n'
+              '5. **Part V · Master Build** — сборка изученных модулей в большой production workflow.\n\n'
+          )
+          if '## Архитектура обучения' not in text:
+              text = text.replace(marker, block + marker, 1)
+          p.write_text(text, encoding='utf-8')
+
+          p = Path('MAINTENANCE_RULES.md')
+          text = p.read_text(encoding='utf-8')
+          marker = '## При добавлении новой главы\n'
+          block = (
+              '## Архитектура курса\n\n'
+              'Workflow Engineering for ComfyUI является самостоятельным обязательным разделом **перед** разбором Hansen. Порядок курса:\n\n'
+              '`PART I · Workflow Engineering → PART II · Generative Systems → PART III · Hansen by Timestamps → PART IV · Practice Labs → PART V · Master Build`\n\n'
+          )
+          if '## Архитектура курса' not in text:
+              text = text.replace(marker, block + marker, 1)
+          p.write_text(text, encoding='utf-8')
+
+      - name: Install dependencies
+        run: npm ci
+      - name: Production build
+        run: npm run build
+      - name: Commit patched structure
+        run: |
+          if git diff --quiet; then
+            echo "No patch needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/manual-data.ts components/manual-page.tsx README.md MAINTENANCE_RULES.md
+          git commit -m "feat: expose Workflow Engineering before Hansen"
+          git push
