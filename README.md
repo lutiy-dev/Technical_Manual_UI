@@ -24,7 +24,7 @@ upscale/overlay, output, diagnostics, checklist, examples, интерактив�
 
 ## Онлайн-версия
 
-После первой успешной публикации GitHub Pages учебник будет доступен по адресу:
+Актуальная GitHub Pages версия учебника доступна по адресу:
 
 <https://lutiy-dev.github.io/Technical_Manual_UI/>
 
