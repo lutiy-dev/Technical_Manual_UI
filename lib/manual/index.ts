@@ -11,6 +11,7 @@ import { workflowEngineeringSwitchesRoutingChapters } from './workflow-engineeri
 import { workflowEngineeringExecutionCacheChapters } from './workflow-engineering-execution-cache';
 import { workflowEngineeringRoutingLabChapters } from './workflow-engineering-routing-lab';
 import { workflowEngineeringBaseConfigLabChapters } from './workflow-engineering-base-config-lab';
+import { workflowEngineeringModuleContractLabChapters } from './workflow-engineering-module-contract-lab';
 import { workflowEngineeringModuleContractsChapters } from './workflow-engineering-module-contracts';
 import { workflowEngineeringCoordinatesBatchChapters } from './workflow-engineering-coordinates-batch';
 import { workflowEngineeringDebuggingChapters } from './workflow-engineering-debugging';
@@ -26,6 +27,7 @@ export const additionalChapters = [
   ...workflowEngineeringExecutionCacheChapters,
   ...workflowEngineeringRoutingLabChapters,
   ...workflowEngineeringBaseConfigLabChapters,
+  ...workflowEngineeringModuleContractLabChapters,
   ...workflowEngineeringModuleContractsChapters,
   ...workflowEngineeringCoordinatesBatchChapters,
   ...workflowEngineeringDebuggingChapters,
@@ -50,6 +52,7 @@ export {
   workflowEngineeringExecutionCacheChapters,
   workflowEngineeringRoutingLabChapters,
   workflowEngineeringBaseConfigLabChapters,
+  workflowEngineeringModuleContractLabChapters,
   workflowEngineeringModuleContractsChapters,
   workflowEngineeringCoordinatesBatchChapters,
   workflowEngineeringDebuggingChapters,
