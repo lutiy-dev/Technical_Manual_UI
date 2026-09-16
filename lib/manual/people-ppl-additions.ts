@@ -75,6 +75,158 @@ export const peoplePplAdditions: Chapter[] = [
   },
   {
     index: 0,
+    slug: 'ppl-workflow-02-replace-existing',
+    navTitle: 'PPL Workflow 02 · Replace Existing People',
+    eyebrow: 'PEOPLE / PPL · WORKFLOW 02',
+    title: 'Улучшение и замена уже размещённых людей через Florence2 + SAM2 + FLUX',
+    lede:
+      'Этот режим не решает, где поставить человека. Положение, масштаб, перспектива и приблизительная поза уже заданы исходной 3D/SDXL сценой; AI локально выделяет существующую фигуру, перегенерирует её и возвращает в тот же spatial slot.',
+    status: 'confirmed',
+    statusNote:
+      'Последовательность detection → segmentation → local generation → cutout/color match → paste подтверждена просмотром showcase; точные node IDs этой ветки ещё требуют отдельной сверки с source JSON.',
+    visual: 'composite',
+    category: 'people-ppl',
+    stage: 'ppl-replace-existing',
+    relatedChapters: ['positioning', 'preparation-color-match', 'composite', 'ppl-mode-2-inpaint', 'diagnostics'],
+    sections: [
+      {
+        id: 'role',
+        eyebrow: '01 · ROLE',
+        title: '3D отвечает за placement, AI — за quality',
+        paragraphs: [
+          'В исходном кадре человек уже существует как spatial anchor: его положение, высота, масштаб, перспектива и приблизительная поза заданы до генерации. Это может быть 3D proxy, библиотечный персонаж, cutout или уже присутствующий человек в базовом изображении.',
+          'AI не перестраивает композицию сцены и не выбирает новую точку для персонажа. Его задача — улучшить или заменить локальную фигуру, сохранив архитектурный контекст вокруг неё.',
+        ],
+        facts: [
+          { status: 'confirmed', title: 'Placement contract', text: 'В showcase люди присутствуют в base image до PPL replacement pass.' },
+          { status: 'inferred', title: 'Archviz principle', text: 'Для production это разделяет ответственность: 3D фиксирует spatial truth, генератор отвечает за visual realism.' },
+        ],
+      },
+      {
+        id: 'route',
+        eyebrow: '02 · ROUTE',
+        title: 'Полный маршрут Variant 2',
+        codeExamples: [
+          {
+            title: 'Node flow',
+            label: 'PPL WORKFLOW 02',
+            code:
+              'Base render with existing person\n→ Florence2 detection / grounding\n→ BBOX / coordinates\n→ SAM2 segmentation\n→ Person mask\n→ Crop by mask / region\n→ Resize local crop\n→ FLUX local regeneration\n→ Remove Background / Cut By Mask\n→ Color Match\n→ Paste By Mask\n→ Optional local detail / inpaint\n→ Final scene',
+            note: 'Главная идея: regenerate locally, composite globally.',
+          },
+        ],
+      },
+      {
+        id: 'detection-segmentation',
+        eyebrow: '03 · DETECTION + SEGMENTATION',
+        title: 'Florence2 находит человека, SAM2 строит точную маску',
+        paragraphs: [
+          'Florence2 выполняет semantic detection / phrase grounding и возвращает область человека в виде bbox или координат. На этом этапе модель отвечает на вопрос «где находится человек?».',
+          'SAM2 получает spatial cue от Florence2 и строит pixel-level mask. На этом этапе задача уже не распознать класс, а аккуратно отделить фигуру от архитектуры и окружения.',
+        ],
+        table: {
+          columns: ['Stage', 'Input', 'Output', 'QA'],
+          rows: [
+            ['Florence2', 'Base image + person/people prompt', 'BBOX / coordinates', 'BBox должен покрывать нужную фигуру, а не весь кадр'],
+            ['SAM2', 'Same image + Florence spatial cue', 'Person mask', 'Контур головы, рук, ног и аксессуаров без захвата фасада'],
+          ],
+        },
+        bullets: [
+          'Florence2 и SAM2 должны получать один и тот же source image и одинаковое coordinate space.',
+          'Не продолжать downstream, если bbox или mask уже неверны.',
+          'Batch-size image и количество bbox должны совпадать; иначе Sam2Segmentation может упасть на индексировании.',
+        ],
+      },
+      {
+        id: 'local-generation',
+        eyebrow: '04 · LOCAL FLUX REGENERATION',
+        title: 'Генератор работает на crop, а не на всём архитектурном кадре',
+        paragraphs: [
+          'По маске или bbox вырезается локальная область вокруг человека. Crop приводится к рабочему размеру и передаётся в отдельную FLUX-ветку.',
+          'Так архитектура за пределами crop не участвует в генерации: модель может улучшить лицо, одежду, материал, волосы и photographic response, не получая свободу перестроить фасад или камеру.',
+        ],
+        facts: [
+          { status: 'confirmed', title: 'Local scope', text: 'Showcase использует отдельную PPL FLUX Generate секцию между segmentation и composite.' },
+          { status: 'inferred', title: 'Production value', text: 'Локальный crop уменьшает область риска и повышает повторяемость по сравнению с full-frame img2img.' },
+        ],
+      },
+      {
+        id: 'cutout-color-match',
+        eyebrow: '05 · PREPARE CUTOUT',
+        title: 'Generated person превращается в compositing element',
+        paragraphs: [
+          'После generation результат отделяется от локального фона: workflow использует операции класса Remove Background / Cut By Mask. На выходе нужна RGB-фигура с корректной alpha/mask representation.',
+          'Перед возвратом в сцену выполняется Color Match, чтобы человек не выглядел вклеенным из другого освещения или камеры.',
+        ],
+        table: {
+          columns: ['Operation', 'Purpose', 'Typical failure'],
+          rows: [
+            ['Remove Background / Cut By Mask', 'Отделить generated person от crop background', 'Halo, потерянные конечности, остатки старого фона'],
+            ['Color Match', 'Подогнать tone / contrast / temperature под base render', 'Кожа и одежда выглядят из другой фотографии'],
+            ['Mask cleanup', 'Стабилизировать contour перед paste', 'Жёсткий край, грязный alpha, floating silhouette'],
+          ],
+        },
+      },
+      {
+        id: 'composite',
+        eyebrow: '06 · COMPOSITE',
+        title: 'Paste By Mask возвращает фигуру в исходный spatial slot',
+        paragraphs: [
+          'Prepared cutout вставляется обратно в base scene по маске и positioning data. Цель — заменить visual appearance человека, не менять утверждённую композицию.',
+          'После paste обязательна проверка масштаба, положения ступней, контакта с поверхностью, occlusion и совпадения света.',
+        ],
+        bullets: [
+          'Сначала проверить paste до любых downstream selectors или upscale.',
+          'Сравнить силуэт generated person с исходным proxy: смещение центра или масштаба считается ошибкой.',
+          'Не использовать Color Match как замену правильному lighting prompt: он корректирует integration, но не исправляет физически неверный свет.',
+        ],
+      },
+      {
+        id: 'detail-pass',
+        eyebrow: '07 · OPTIONAL DETAIL / INPAINT',
+        title: 'Последний локальный pass исправляет интеграцию, а не создаёт новую сцену',
+        paragraphs: [
+          'После composite отдельный detail/inpaint pass может исправить руки, волосы, край одежды, контакт ступней, небольшие пересечения и локальную тень.',
+          'Этот этап должен оставаться локальным: если маска расширяется на значительную часть архитектуры, workflow теряет главное преимущество controlled replacement.',
+        ],
+      },
+      {
+        id: 'use-cases',
+        eyebrow: '08 · WHERE TO USE',
+        title: 'Где Variant 2 особенно полезен',
+        bullets: [
+          'Hero people на переднем и среднем плане.',
+          'Велосипедисты и персонажи с заданной позой.',
+          'Люди у входной группы, витрины или фасада.',
+          'Посетители выставки и общественных пространств, где placement согласован сценой.',
+          'Замена библиотечного 3D-персонажа без изменения camera / architecture.',
+        ],
+        facts: [
+          { status: 'confirmed', title: 'Not crowd placement', text: 'Variant 2 не является алгоритмом автоматического размещения новых людей в пустой сцене.' },
+          { status: 'not-confirmed', title: 'Variant 1', text: 'Отдельный workflow генерации новых людей по маске будет документирован после следующего таймкода и не должен смешиваться с Variant 2.' },
+        ],
+      },
+      {
+        id: 'checklist',
+        eyebrow: '09 · PRODUCTION CHECKLIST',
+        title: 'Проверка Variant 2 перед финалом',
+        bullets: [
+          'Исходный человек находится в правильном месте и масштабе до AI-pass.',
+          'Florence2 bbox покрывает только нужного персонажа.',
+          'SAM2 mask чистая и не захватывает архитектуру.',
+          'Crop содержит фигуру целиком и достаточный контекст для генерации.',
+          'FLUX не меняет предполагаемую spatial role персонажа.',
+          'Background удалён без halo и дыр в конечностях.',
+          'Color Match согласует человека с общей экспозицией кадра.',
+          'Paste сохраняет исходный scale / position.',
+          'Ступни, contact shadow и occlusion выглядят физически правдоподобно.',
+          'Финальный локальный inpaint не затрагивает архитектурную геометрию.',
+        ],
+      },
+    ],
+  },
+  {
+    index: 0,
     slug: 'ppl-mode-2-inpaint',
     navTitle: 'PPL Mode 2 / 3D Inpaint',
     eyebrow: 'PEOPLE / PPL · ALTERNATIVE',
