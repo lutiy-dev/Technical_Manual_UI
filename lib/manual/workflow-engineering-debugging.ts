@@ -20,6 +20,7 @@ export const workflowEngineeringDebuggingChapters: Chapter[] = [
       'workflow-engineering-coordinates-batch',
       'diagnostics',
       'checklist',
+      'workflow-engineering-reproducibility',
     ],
     sections: [
       {

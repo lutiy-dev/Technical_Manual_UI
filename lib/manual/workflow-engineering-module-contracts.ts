@@ -20,6 +20,7 @@ export const workflowEngineeringModuleContractsChapters: Chapter[] = [
       'workflow-engineering-base-config',
       'people-ppl-overview',
       'main-flux',
+      'workflow-engineering-coordinates-batch',
     ],
     sections: [
       {

@@ -20,6 +20,7 @@ export const workflowEngineeringCoordinatesBatchChapters: Chapter[] = [
       'inputs',
       'segmentation-masks',
       'segmentation-mask',
+      'workflow-engineering-debugging',
     ],
     sections: [
       {
