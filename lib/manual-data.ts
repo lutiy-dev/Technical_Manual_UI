@@ -1064,6 +1064,7 @@ const goldenRunSection: ChapterSection = {
 
 export const manualChapters: Chapter[] = [
   additionalChapter('workflow-engineering-overview'),
+  additionalChapter('workflow-engineering-node-literacy'),
   additionalChapter('overview'),
   additionalChapter('graph-reading'),
   additionalChapter('inputs'),
