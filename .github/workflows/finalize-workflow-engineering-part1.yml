@@ -1,0 +1,94 @@
+name: Finalize Workflow Engineering Part I
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/finalize-workflow-engineering-part1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Wire Part I routes and cross-links
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          p = Path('lib/manual-data.ts')
+          text = p.read_text(encoding='utf-8')
+          desired = (
+              "export const manualChapters: Chapter[] = [\n"
+              "  additionalChapter('workflow-engineering-overview'),\n"
+              "  additionalChapter('workflow-engineering-node-literacy'),\n"
+              "  additionalChapter('workflow-engineering-graph-literacy'),\n"
+              "  additionalChapter('workflow-engineering-base-config'),\n"
+              "  additionalChapter('workflow-engineering-data-control-plane'),\n"
+              "  additionalChapter('workflow-engineering-module-contracts'),\n"
+              "  additionalChapter('workflow-engineering-coordinates-batch'),\n"
+              "  additionalChapter('workflow-engineering-debugging'),\n"
+              "  additionalChapter('workflow-engineering-reproducibility'),\n"
+          )
+          pattern = (
+              r"export const manualChapters: Chapter\[\] = \[\n"
+              r"(?:  additionalChapter\('workflow-engineering-[^']+'\),\n)+"
+          )
+          if re.search(pattern, text):
+              text = re.sub(pattern, desired, text, count=1)
+          else:
+              text = text.replace("export const manualChapters: Chapter[] = [\n", desired, 1)
+          p.write_text(text, encoding='utf-8')
+
+          # Chain the chapters through relatedChapters where useful.
+          patches = [
+              ('lib/manual/workflow-engineering-module-contracts.ts', "      'main-flux',\n", "      'main-flux',\n      'workflow-engineering-coordinates-batch',\n"),
+              ('lib/manual/workflow-engineering-coordinates-batch.ts', "      'segmentation-mask',\n", "      'segmentation-mask',\n      'workflow-engineering-debugging',\n"),
+              ('lib/manual/workflow-engineering-debugging.ts', "      'checklist',\n", "      'checklist',\n      'workflow-engineering-reproducibility',\n"),
+          ]
+          for path, old, new in patches:
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if new not in text:
+                  if old not in text:
+                      raise SystemExit(f'Cross-link marker missing in {path}')
+                  text = text.replace(old, new, 1)
+              p.write_text(text, encoding='utf-8')
+
+          p = Path('README.md')
+          text = p.read_text(encoding='utf-8')
+          text = re.sub(
+              r'Сайт разбит на \d+ (?:отдельных маршрутов|отдельный маршрут|отдельных маршрута)',
+              'Сайт разбит на 38 отдельных маршрутов',
+              text,
+              count=1,
+          )
+          p.write_text(text, encoding='utf-8')
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production build
+        run: npm run build
+
+      - name: Commit Part I
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/manual-data.ts lib/manual/workflow-engineering-module-contracts.ts lib/manual/workflow-engineering-coordinates-batch.ts lib/manual/workflow-engineering-debugging.ts README.md
+          if git diff --cached --quiet; then
+            echo "No patch needed"
+            exit 0
+          fi
+          git commit -m "feat: complete Workflow Engineering Part I structure"
+          git pull --rebase origin main
+          git push
