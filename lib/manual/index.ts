@@ -8,6 +8,7 @@ import { workflowEngineeringGraphLiteracyChapters } from './workflow-engineering
 import { workflowEngineeringBaseConfigChapters } from './workflow-engineering-base-config';
 import { workflowEngineeringDataControlPlaneChapters } from './workflow-engineering-data-control-plane';
 import { workflowEngineeringSwitchesRoutingChapters } from './workflow-engineering-switches-routing';
+import { workflowEngineeringExecutionCacheChapters } from './workflow-engineering-execution-cache';
 import { workflowEngineeringModuleContractsChapters } from './workflow-engineering-module-contracts';
 import { workflowEngineeringCoordinatesBatchChapters } from './workflow-engineering-coordinates-batch';
 import { workflowEngineeringDebuggingChapters } from './workflow-engineering-debugging';
@@ -20,6 +21,7 @@ export const additionalChapters = [
   ...workflowEngineeringBaseConfigChapters,
   ...workflowEngineeringDataControlPlaneChapters,
   ...workflowEngineeringSwitchesRoutingChapters,
+  ...workflowEngineeringExecutionCacheChapters,
   ...workflowEngineeringModuleContractsChapters,
   ...workflowEngineeringCoordinatesBatchChapters,
   ...workflowEngineeringDebuggingChapters,
@@ -41,6 +43,7 @@ export {
   workflowEngineeringBaseConfigChapters,
   workflowEngineeringDataControlPlaneChapters,
   workflowEngineeringSwitchesRoutingChapters,
+  workflowEngineeringExecutionCacheChapters,
   workflowEngineeringModuleContractsChapters,
   workflowEngineeringCoordinatesBatchChapters,
   workflowEngineeringDebuggingChapters,
