@@ -1,0 +1,53 @@
+name: Patch manual navigation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-manual-navigation.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch manual data and README
+        shell: python
+        run: |
+          from pathlib import Path
+
+          manual = Path('lib/manual-data.ts')
+          text = manual.read_text(encoding='utf-8')
+          needle = "  additionalChapter('positioning'),\n  existingChapter('selector-logic', 'people-ppl', {"
+          replacement = "  additionalChapter('positioning'),\n  additionalChapter('ppl-workflow-02-replace-existing'),\n  existingChapter('selector-logic', 'people-ppl', {"
+          if "additionalChapter('ppl-workflow-02-replace-existing')" not in text:
+              if needle not in text:
+                  raise SystemExit('Could not find insertion point in lib/manual-data.ts')
+              text = text.replace(needle, replacement, 1)
+              manual.write_text(text, encoding='utf-8')
+
+          readme = Path('README.md')
+          r = readme.read_text(encoding='utf-8')
+          r = r.replace('Сайт разбит на 28 отдельных маршрутов', 'Сайт разбит на 29 отдельных маршрутов')
+          marker = '## Правило обновления учебника'
+          if marker not in r:
+              r += "\n\n## Правило обновления учебника\n\nПри добавлении новой главы недостаточно изменить только `lib/manual/*.ts`. Обновление считается завершённым только после цепочки: `CONTENT → manualChapters → ROUTE → SIDEBAR/COUNTER → BUILD → DEPLOY → VISUAL CHECK`. Полный обязательный чек-лист хранится в [`MAINTENANCE_RULES.md`](./MAINTENANCE_RULES.md).\n"
+          readme.write_text(r, encoding='utf-8')
+
+          # one-shot workflow: remove itself after applying the patch
+          Path('.github/workflows/patch-manual-navigation.yml').unlink()
+
+      - name: Commit patch
+        run: |
+          git config user.name "OVizLAB"
+          git config user.email "67496316+lutiy-dev@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: expose PPL workflow 02 in manual navigation"
+          git push
