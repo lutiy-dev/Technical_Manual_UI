@@ -1,0 +1,107 @@
+name: Finalize Workflow Engineering stage 1
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/patch-workflow-engineering-stage1-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Apply stage 1 structure
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          p = Path('lib/manual/index.ts')
+          text = p.read_text(encoding='utf-8')
+          if "workflowEngineeringGraphLiteracyChapters" not in text:
+              text = text.replace(
+                  "import { workflowEngineeringNodeLiteracyChapters } from './workflow-engineering-node-literacy';",
+                  "import { workflowEngineeringNodeLiteracyChapters } from './workflow-engineering-node-literacy';\nimport { workflowEngineeringGraphLiteracyChapters } from './workflow-engineering-graph-literacy';",
+                  1,
+              )
+              text = text.replace(
+                  "  ...workflowEngineeringNodeLiteracyChapters,\n  ...foundationChapters,",
+                  "  ...workflowEngineeringNodeLiteracyChapters,\n  ...workflowEngineeringGraphLiteracyChapters,\n  ...foundationChapters,",
+                  1,
+              )
+              text = text.replace(
+                  "  workflowEngineeringNodeLiteracyChapters,\n};",
+                  "  workflowEngineeringNodeLiteracyChapters,\n  workflowEngineeringGraphLiteracyChapters,\n};",
+                  1,
+              )
+          p.write_text(text, encoding='utf-8')
+
+          p = Path('lib/manual-data.ts')
+          text = p.read_text(encoding='utf-8')
+          desired = "  additionalChapter('workflow-engineering-overview'),\n  additionalChapter('workflow-engineering-node-literacy'),\n  additionalChapter('workflow-engineering-graph-literacy'),\n  additionalChapter('overview'),"
+          if desired not in text:
+              candidates = [
+                  "  additionalChapter('workflow-engineering-overview'),\n  additionalChapter('workflow-engineering-node-literacy'),\n  additionalChapter('overview'),",
+                  "  additionalChapter('workflow-engineering-overview'),\n  additionalChapter('overview'),",
+              ]
+              for old in candidates:
+                  if old in text:
+                      text = text.replace(old, desired, 1)
+                      break
+              else:
+                  raise SystemExit('Workflow Engineering route marker not found')
+          p.write_text(text, encoding='utf-8')
+
+          p = Path('lib/manual/workflow-engineering.ts')
+          text = p.read_text(encoding='utf-8')
+          if "      'workflow-engineering-graph-literacy'," not in text:
+              if "      'workflow-engineering-node-literacy'," in text:
+                  text = text.replace(
+                      "      'workflow-engineering-node-literacy',\n",
+                      "      'workflow-engineering-node-literacy',\n      'workflow-engineering-graph-literacy',\n",
+                      1,
+                  )
+              else:
+                  text = text.replace(
+                      "    relatedChapters: [\n",
+                      "    relatedChapters: [\n      'workflow-engineering-node-literacy',\n      'workflow-engineering-graph-literacy',\n",
+                      1,
+                  )
+          p.write_text(text, encoding='utf-8')
+
+          p = Path('README.md')
+          text = p.read_text(encoding='utf-8')
+          text = re.sub(
+              r'Сайт разбит на \d+ (?:отдельных маршрутов|отдельный маршрут|отдельных маршрута)',
+              'Сайт разбит на 32 отдельных маршрута',
+              text,
+              count=1,
+          )
+          p.write_text(text, encoding='utf-8')
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production build
+        run: npm run build
+
+      - name: Commit stage 1
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/manual/index.ts lib/manual-data.ts lib/manual/workflow-engineering.ts README.md
+          if git diff --cached --quiet; then
+            echo "No patch needed"
+            exit 0
+          fi
+          git commit -m "feat: complete Workflow Engineering literacy stage"
+          git push
