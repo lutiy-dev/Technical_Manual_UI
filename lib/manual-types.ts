@@ -1,6 +1,7 @@
 export type EvidenceStatus = 'confirmed' | 'inferred' | 'not-confirmed';
 
 export type ManualCategory =
+  | 'workflow-engineering'
   | 'foundation'
   | 'base-generation'
   | 'people-ppl'
