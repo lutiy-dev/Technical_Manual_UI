@@ -1,0 +1,107 @@
+name: Finalize evening learning block
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/finalize-evening-block.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Wire new chapters and refresh cross-links
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          # 1) Route order
+          p = Path('lib/manual-data.ts')
+          text = p.read_text(encoding='utf-8')
+
+          old = "  additionalChapter('workflow-engineering-graph-literacy'),\n  additionalChapter('workflow-engineering-base-config'),"
+          new = "  additionalChapter('workflow-engineering-graph-literacy'),\n  additionalChapter('workflow-engineering-groups-naming'),\n  additionalChapter('workflow-engineering-base-config'),"
+          if "additionalChapter('workflow-engineering-groups-naming')" not in text:
+              if old not in text:
+                  raise SystemExit('Workflow Engineering insertion point not found')
+              text = text.replace(old, new, 1)
+
+          old = "  additionalChapter('positioning'),\n  additionalChapter('ppl-workflow-02-replace-existing'),"
+          new = "  additionalChapter('positioning'),\n  additionalChapter('ppl-workflow-01-generate-place'),\n  additionalChapter('ppl-workflow-02-replace-existing'),"
+          if "additionalChapter('ppl-workflow-01-generate-place')" not in text:
+              if old not in text:
+                  raise SystemExit('PEOPLE Workflow 01 insertion point not found')
+              text = text.replace(old, new, 1)
+
+          p.write_text(text, encoding='utf-8')
+
+          # 2) Cross-links / stale Workflow 02 note
+          p = Path('lib/manual/people-ppl-additions.ts')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace(
+              "relatedChapters: ['preparation-color-match', 'selector-logic', 'composite', 'diagnostics'],",
+              "relatedChapters: ['preparation-color-match', 'ppl-workflow-01-generate-place', 'selector-logic', 'composite', 'diagnostics'],",
+              1,
+          )
+          text = text.replace(
+              "relatedChapters: ['positioning', 'preparation-color-match', 'composite', 'ppl-mode-2-inpaint', 'diagnostics'],",
+              "relatedChapters: ['positioning', 'ppl-workflow-01-generate-place', 'preparation-color-match', 'composite', 'ppl-mode-2-inpaint', 'diagnostics'],",
+              1,
+          )
+          text = text.replace(
+              "{ status: 'not-confirmed', title: 'Variant 1', text: 'Отдельный workflow генерации новых людей по маске будет документирован после следующего таймкода и не должен смешиваться с Variant 2.' },",
+              "{ status: 'confirmed', title: 'Workflow 01 documented separately', text: 'Generate & Place New People by Mask вынесен в отдельную главу. Workflow 01 и Workflow 02 не смешиваются: у них разный spatial contract.' },",
+              1,
+          )
+          p.write_text(text, encoding='utf-8')
+
+          # 3) README / route count
+          p = Path('README.md')
+          text = p.read_text(encoding='utf-8')
+          text = re.sub(
+              r'Сайт разбит на \d+ (?:отдельных маршрутов|отдельный маршрут|отдельных маршрута)',
+              'Сайт разбит на 45 отдельных маршрутов',
+              text,
+              count=1,
+          )
+          text = text.replace(
+              'Node Literacy, Graph Literacy, BASE CONFIG, control/data plane, switches/selectors/bypass, execution/queue/cache, LAB 01 Routing Sandbox, LAB 02 BASE CONFIG, LAB 03 Module Contract, modules, contracts, checkpoints и reproducibility.',
+              'Node Literacy, Graph Literacy, Groups & Naming Standard, BASE CONFIG, control/data plane, switches/selectors/bypass, execution/queue/cache, LAB 01 Routing Sandbox, LAB 02 BASE CONFIG, LAB 03 Module Contract, modules, contracts, checkpoints и reproducibility.',
+          )
+          text = text.replace(
+              'PEOPLE/PPL, main FLUX, optional',
+              'PEOPLE/PPL (Workflow 01 Generate & Place + Workflow 02 Replace Existing), main FLUX, optional',
+          )
+          p.write_text(text, encoding='utf-8')
+
+          # 4) Guardrails
+          md = Path('lib/manual-data.ts').read_text(encoding='utf-8')
+          assert md.count("additionalChapter('workflow-engineering-groups-naming')") == 1
+          assert md.count("additionalChapter('ppl-workflow-01-generate-place')") == 1
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production build
+        run: npm run build
+
+      - name: Remove temporary finalizer
+        run: rm .github/workflows/finalize-evening-block.yml
+
+      - name: Commit finalized block
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/manual-data.ts lib/manual/people-ppl-additions.ts README.md .github/workflows/finalize-evening-block.yml
+          git commit -m "feat: finish workflow engineering core and PPL workflow 01"
+          git push
