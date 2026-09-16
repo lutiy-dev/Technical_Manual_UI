@@ -5,11 +5,13 @@ import { peoplePplAdditions } from './people-ppl-additions';
 import { workflowEngineeringChapters } from './workflow-engineering';
 import { workflowEngineeringNodeLiteracyChapters } from './workflow-engineering-node-literacy';
 import { workflowEngineeringGraphLiteracyChapters } from './workflow-engineering-graph-literacy';
+import { workflowEngineeringBaseConfigChapters } from './workflow-engineering-base-config';
 
 export const additionalChapters = [
   ...workflowEngineeringChapters,
   ...workflowEngineeringNodeLiteracyChapters,
   ...workflowEngineeringGraphLiteracyChapters,
+  ...workflowEngineeringBaseConfigChapters,
   ...foundationChapters,
   ...baseGenerationChapters,
   ...peoplePplAdditions,
@@ -24,4 +26,5 @@ export {
   workflowEngineeringChapters,
   workflowEngineeringNodeLiteracyChapters,
   workflowEngineeringGraphLiteracyChapters,
+  workflowEngineeringBaseConfigChapters,
 };
