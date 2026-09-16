@@ -20,6 +20,7 @@ export const workflowEngineeringDataControlPlaneChapters: Chapter[] = [
       'workflow-engineering-base-config',
       'control-panel',
       'inputs',
+      'workflow-engineering-module-contracts',
     ],
     sections: [
       {

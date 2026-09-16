@@ -21,6 +21,7 @@ export const workflowEngineeringBaseConfigChapters: Chapter[] = [
       'workflow-engineering-graph-literacy',
       'control-panel',
       'models-dependencies',
+      'workflow-engineering-data-control-plane',
     ],
     sections: [
       {
