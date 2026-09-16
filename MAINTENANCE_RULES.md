@@ -73,6 +73,12 @@ BASE CONFIG рассматривать не как декоративную па
 - OUTPUT;
 - диагностические режимы и выбор минимального активного маршрута.
 
+## Архитектура курса
+
+Workflow Engineering for ComfyUI является самостоятельным обязательным разделом **перед** разбором Hansen. Порядок курса:
+
+`PART I · Workflow Engineering → PART II · Generative Systems → PART III · Hansen by Timestamps → PART IV · Practice Labs → PART V · Master Build`
+
 ## При добавлении новой главы
 
 1. Добавить или обновить контент главы в соответствующем `lib/manual/*.ts`.

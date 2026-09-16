@@ -818,6 +818,7 @@ function ArticleSections({ chapter }: { chapter: Chapter }) {
 // Full-document links are intentional: GitHub Pages serves the exported HTML files,
 // while Vinext's client-side RSC navigation requires a runtime endpoint.
 const categoryLabels: Record<ManualCategory, string> = {
+  'workflow-engineering': 'WORKFLOW ENGINEERING',
   foundation: 'FOUNDATION',
   'base-generation': 'BASE GENERATION',
   'people-ppl': 'PEOPLE / PPL · MODULE',

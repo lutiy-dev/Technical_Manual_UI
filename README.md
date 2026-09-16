@@ -4,13 +4,23 @@
 `Epspoziciya_archviz_ph_sdxlflux_v001`. PEOPLE/PPL сохранён как отдельный
 учебный модуль внутри общей архитектуры.
 
-Сайт разбит на 29 отдельных маршрутов, объединённых в пять групп:
-Foundation, Base Generation, PEOPLE/PPL Module, Final Pipeline и Evidence &
+Сайт разбит на 30 отдельных маршрутов, объединённых в шесть групп:
+Workflow Engineering, Foundation, Base Generation, PEOPLE/PPL Module, Final Pipeline и Evidence &
 Reference. В руководство входят полная архитектура, правила чтения графа,
 inputs, 28 controls, модели, prompts, SDXL, ControlNet, IPAdapter/LoRA, четыре
 системы масок, detail conservation, PEOPLE/PPL, main FLUX, optional
 upscale/overlay, output, diagnostics, checklist, examples, интерактивный индекс
 252 узлов и Resources.
+
+## Архитектура обучения
+
+Учебник следует обязательному порядку: **сначала архитектура графа, потом генеративные ноды, потом практика**.
+
+1. **Part I · Workflow Engineering for ComfyUI** — Node Literacy, Graph Literacy, BASE CONFIG, control/data plane, modules, contracts, checkpoints и reproducibility.
+2. **Part II · Generative Systems** — SDXL, FLUX, ControlNet, Florence2, SAM2, masks, composite и upscale.
+3. **Part III · Hansen by Timestamps** — разбор production workflow по таймкодам видео.
+4. **Part IV · Practice Labs** — независимые standalone JSON-модули, упражнения и QC.
+5. **Part V · Master Build** — сборка изученных модулей в большой production workflow.
 
 ## Онлайн-версия
 
