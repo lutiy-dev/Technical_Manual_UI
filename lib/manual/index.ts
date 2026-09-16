@@ -2,9 +2,11 @@ import { baseGenerationChapters } from './base-generation';
 import { finalPipelineChapters } from './final-pipeline';
 import { foundationChapters } from './foundation';
 import { peoplePplAdditions } from './people-ppl-additions';
+import { peoplePplWorkflow01Chapters } from './people-ppl-workflow-01';
 import { workflowEngineeringChapters } from './workflow-engineering';
 import { workflowEngineeringNodeLiteracyChapters } from './workflow-engineering-node-literacy';
 import { workflowEngineeringGraphLiteracyChapters } from './workflow-engineering-graph-literacy';
+import { workflowEngineeringGroupsNamingChapters } from './workflow-engineering-groups-naming';
 import { workflowEngineeringBaseConfigChapters } from './workflow-engineering-base-config';
 import { workflowEngineeringDataControlPlaneChapters } from './workflow-engineering-data-control-plane';
 import { workflowEngineeringSwitchesRoutingChapters } from './workflow-engineering-switches-routing';
@@ -21,6 +23,7 @@ export const additionalChapters = [
   ...workflowEngineeringChapters,
   ...workflowEngineeringNodeLiteracyChapters,
   ...workflowEngineeringGraphLiteracyChapters,
+  ...workflowEngineeringGroupsNamingChapters,
   ...workflowEngineeringBaseConfigChapters,
   ...workflowEngineeringDataControlPlaneChapters,
   ...workflowEngineeringSwitchesRoutingChapters,
@@ -34,6 +37,7 @@ export const additionalChapters = [
   ...workflowEngineeringReproducibilityChapters,
   ...foundationChapters,
   ...baseGenerationChapters,
+  ...peoplePplWorkflow01Chapters,
   ...peoplePplAdditions,
   ...finalPipelineChapters,
 ];
@@ -43,9 +47,11 @@ export {
   finalPipelineChapters,
   foundationChapters,
   peoplePplAdditions,
+  peoplePplWorkflow01Chapters,
   workflowEngineeringChapters,
   workflowEngineeringNodeLiteracyChapters,
   workflowEngineeringGraphLiteracyChapters,
+  workflowEngineeringGroupsNamingChapters,
   workflowEngineeringBaseConfigChapters,
   workflowEngineeringDataControlPlaneChapters,
   workflowEngineeringSwitchesRoutingChapters,
