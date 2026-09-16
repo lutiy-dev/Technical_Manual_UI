@@ -17,6 +17,7 @@ export const workflowEngineeringChapters: Chapter[] = [
     stage: 'workflow-engineering-foundation',
     relatedChapters: [
       'workflow-engineering-node-literacy',
+      'workflow-engineering-graph-literacy',
       'graph-reading',
       'inputs',
       'control-panel',
