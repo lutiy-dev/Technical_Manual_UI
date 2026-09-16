@@ -1066,6 +1066,7 @@ export const manualChapters: Chapter[] = [
   additionalChapter('workflow-engineering-overview'),
   additionalChapter('workflow-engineering-node-literacy'),
   additionalChapter('workflow-engineering-graph-literacy'),
+  additionalChapter('workflow-engineering-groups-naming'),
   additionalChapter('workflow-engineering-base-config'),
   additionalChapter('workflow-engineering-data-control-plane'),
   additionalChapter('workflow-engineering-switches-routing'),
@@ -1094,6 +1095,7 @@ export const manualChapters: Chapter[] = [
   existingChapter('segmentation-mask', 'people-ppl', { navTitle: 'PPL Segmentation / Mask' }),
   existingChapter('preparation-color-match', 'people-ppl'),
   additionalChapter('positioning'),
+  additionalChapter('ppl-workflow-01-generate-place'),
   additionalChapter('ppl-workflow-02-replace-existing'),
   existingChapter('selector-logic', 'people-ppl', {
     sections: [...existingChapterMap['selector-logic'].sections, selectorTruthSection],

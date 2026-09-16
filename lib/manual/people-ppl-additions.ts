@@ -15,7 +15,7 @@ export const peoplePplAdditions: Chapter[] = [
     category: 'people-ppl',
     stage: 'ppl-position',
     relatedNodes: [420, 429, 430, 449, 477, 552, 684, 685, 693, 780, 781, 782, 827, 829],
-    relatedChapters: ['preparation-color-match', 'selector-logic', 'composite', 'diagnostics'],
+    relatedChapters: ['preparation-color-match', 'ppl-workflow-01-generate-place', 'selector-logic', 'composite', 'diagnostics'],
     sections: [
       {
         id: 'spaces',
@@ -87,7 +87,7 @@ export const peoplePplAdditions: Chapter[] = [
     visual: 'composite',
     category: 'people-ppl',
     stage: 'ppl-replace-existing',
-    relatedChapters: ['positioning', 'preparation-color-match', 'composite', 'ppl-mode-2-inpaint', 'diagnostics'],
+    relatedChapters: ['positioning', 'ppl-workflow-01-generate-place', 'preparation-color-match', 'composite', 'ppl-mode-2-inpaint', 'diagnostics'],
     sections: [
       {
         id: 'role',
@@ -203,7 +203,7 @@ export const peoplePplAdditions: Chapter[] = [
         ],
         facts: [
           { status: 'confirmed', title: 'Not crowd placement', text: 'Variant 2 не является алгоритмом автоматического размещения новых людей в пустой сцене.' },
-          { status: 'not-confirmed', title: 'Variant 1', text: 'Отдельный workflow генерации новых людей по маске будет документирован после следующего таймкода и не должен смешиваться с Variant 2.' },
+          { status: 'confirmed', title: 'Workflow 01 documented separately', text: 'Generate & Place New People by Mask вынесен в отдельную главу. Workflow 01 и Workflow 02 не смешиваются: у них разный spatial contract.' },
         ],
       },
       {
