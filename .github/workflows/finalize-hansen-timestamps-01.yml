@@ -1,0 +1,138 @@
+name: Finalize Hansen timestamp lessons 01
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/finalize-hansen-timestamps-01.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Wire Hansen timestamp category and chapters
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          # manual-types.ts: add category
+          p = Path('lib/manual-types.ts')
+          text = p.read_text(encoding='utf-8')
+          if "| 'hansen-timestamps'" not in text:
+              text = text.replace(
+                  "  | 'base-generation'\n  | 'people-ppl'",
+                  "  | 'base-generation'\n  | 'hansen-timestamps'\n  | 'people-ppl'",
+                  1,
+              )
+          p.write_text(text, encoding='utf-8')
+
+          # lib/manual/index.ts: import/export/additional chapters
+          p = Path('lib/manual/index.ts')
+          text = p.read_text(encoding='utf-8')
+          if "./hansen-timestamps-01" not in text:
+              text = text.replace(
+                  "import { foundationChapters } from './foundation';\n",
+                  "import { foundationChapters } from './foundation';\nimport { hansenTimestampChapters01 } from './hansen-timestamps-01';\n",
+                  1,
+              )
+          if "...hansenTimestampChapters01," not in text:
+              text = text.replace(
+                  "  ...baseGenerationChapters,\n  ...peoplePplWorkflow01Chapters,",
+                  "  ...baseGenerationChapters,\n  ...hansenTimestampChapters01,\n  ...peoplePplWorkflow01Chapters,",
+                  1,
+              )
+          if "  hansenTimestampChapters01,\n" not in text.split('export {', 1)[1]:
+              text = text.replace(
+                  "  foundationChapters,\n  peoplePplAdditions,",
+                  "  foundationChapters,\n  hansenTimestampChapters01,\n  peoplePplAdditions,",
+                  1,
+              )
+          p.write_text(text, encoding='utf-8')
+
+          # manual-page.tsx: sidebar category label
+          p = Path('components/manual-page.tsx')
+          text = p.read_text(encoding='utf-8')
+          if "'hansen-timestamps': 'HANSEN BY TIMESTAMPS'" not in text:
+              text = text.replace(
+                  "  'base-generation': 'BASE GENERATION',\n  'people-ppl': 'PEOPLE / PPL · MODULE',",
+                  "  'base-generation': 'BASE GENERATION',\n  'hansen-timestamps': 'HANSEN BY TIMESTAMPS',\n  'people-ppl': 'PEOPLE / PPL · MODULE',",
+                  1,
+              )
+          p.write_text(text, encoding='utf-8')
+
+          # manual-data.ts: place Part III before PEOPLE chapters
+          p = Path('lib/manual-data.ts')
+          text = p.read_text(encoding='utf-8')
+          marker = "  additionalChapter('detail-conservation'),\n  peopleOverview,"
+          replacement = (
+              "  additionalChapter('detail-conservation'),\n"
+              "  additionalChapter('hansen-00-39-production-method'),\n"
+              "  additionalChapter('hansen-01-08-input-data-txt2img'),\n"
+              "  additionalChapter('hansen-02-40-process1-txt2img'),\n"
+              "  peopleOverview,"
+          )
+          if "additionalChapter('hansen-00-39-production-method')" not in text:
+              if marker not in text:
+                  raise SystemExit('manual-data insertion point not found')
+              text = text.replace(marker, replacement, 1)
+          p.write_text(text, encoding='utf-8')
+
+          # README route count / categories / architecture description
+          p = Path('README.md')
+          text = p.read_text(encoding='utf-8')
+          text = re.sub(
+              r'Сайт разбит на \d+ отдельных маршрутов, объединённых в \w+ групп[^:]*:',
+              'Сайт разбит на 48 отдельных маршрутов, объединённых в семь групп:',
+              text,
+              count=1,
+          )
+          text = text.replace(
+              'Workflow Engineering, Foundation, Base Generation, PEOPLE/PPL Module, Final Pipeline и Evidence &',
+              'Workflow Engineering, Foundation, Base Generation, Hansen by Timestamps, PEOPLE/PPL Module, Final Pipeline и Evidence &',
+              1,
+          )
+          text = text.replace(
+              '3. **Part III · Hansen by Timestamps** — разбор production workflow по таймкодам видео.',
+              '3. **Part III · Hansen by Timestamps** — production-first reverse engineering по видео; первые главы: 00:39 Production Method, 01:08 Input Data, 02:40 Process 1 TXT2IMG. Главная цель — универсальная логика ComfyUI, а не каталог моделей.',
+              1,
+          )
+          p.write_text(text, encoding='utf-8')
+
+          # guardrails
+          mt = Path('lib/manual-types.ts').read_text(encoding='utf-8')
+          mi = Path('lib/manual/index.ts').read_text(encoding='utf-8')
+          md = Path('lib/manual-data.ts').read_text(encoding='utf-8')
+          mp = Path('components/manual-page.tsx').read_text(encoding='utf-8')
+          assert "'hansen-timestamps'" in mt
+          assert 'hansenTimestampChapters01' in mi
+          assert md.count("additionalChapter('hansen-00-39-production-method')") == 1
+          assert md.count("additionalChapter('hansen-01-08-input-data-txt2img')") == 1
+          assert md.count("additionalChapter('hansen-02-40-process1-txt2img')") == 1
+          assert "HANSEN BY TIMESTAMPS" in mp
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production build
+        run: npm run build
+
+      - name: Remove temporary finalizer
+        run: rm .github/workflows/finalize-hansen-timestamps-01.yml
+
+      - name: Commit finalized timestamp block
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/manual-types.ts lib/manual/index.ts components/manual-page.tsx lib/manual-data.ts README.md .github/workflows/finalize-hansen-timestamps-01.yml
+          git commit -m "feat: add Hansen timestamp lessons 00-39 to 02-40"
+          git push
