@@ -4,6 +4,7 @@ export type ManualCategory =
   | 'workflow-engineering'
   | 'foundation'
   | 'base-generation'
+  | 'hansen-timestamps'
   | 'people-ppl'
   | 'final-pipeline'
   | 'evidence-reference';

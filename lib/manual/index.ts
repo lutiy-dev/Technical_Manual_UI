@@ -1,6 +1,7 @@
 import { baseGenerationChapters } from './base-generation';
 import { finalPipelineChapters } from './final-pipeline';
 import { foundationChapters } from './foundation';
+import { hansenTimestampChapters01 } from './hansen-timestamps-01';
 import { peoplePplAdditions } from './people-ppl-additions';
 import { peoplePplWorkflow01Chapters } from './people-ppl-workflow-01';
 import { workflowEngineeringChapters } from './workflow-engineering';
@@ -37,6 +38,7 @@ export const additionalChapters = [
   ...workflowEngineeringReproducibilityChapters,
   ...foundationChapters,
   ...baseGenerationChapters,
+  ...hansenTimestampChapters01,
   ...peoplePplWorkflow01Chapters,
   ...peoplePplAdditions,
   ...finalPipelineChapters,
@@ -46,6 +48,7 @@ export {
   baseGenerationChapters,
   finalPipelineChapters,
   foundationChapters,
+  hansenTimestampChapters01,
   peoplePplAdditions,
   peoplePplWorkflow01Chapters,
   workflowEngineeringChapters,

@@ -821,6 +821,7 @@ const categoryLabels: Record<ManualCategory, string> = {
   'workflow-engineering': 'WORKFLOW ENGINEERING',
   foundation: 'FOUNDATION',
   'base-generation': 'BASE GENERATION',
+  'hansen-timestamps': 'HANSEN BY TIMESTAMPS',
   'people-ppl': 'PEOPLE / PPL · MODULE',
   'final-pipeline': 'FINAL PIPELINE',
   'evidence-reference': 'EVIDENCE & REFERENCE',
