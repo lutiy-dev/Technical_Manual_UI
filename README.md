@@ -4,7 +4,7 @@
 `Epspoziciya_archviz_ph_sdxlflux_v001`. PEOPLE/PPL сохранён как отдельный
 учебный модуль внутри общей архитектуры.
 
-Сайт разбит на 48 отдельных маршрутов, объединённых в семь групп:
+Сайт разбит на 52 отдельных маршрута, объединённых в семь групп:
 Workflow Engineering, Foundation, Base Generation, Hansen by Timestamps, PEOPLE/PPL Module, Final Pipeline и Evidence &
 Reference. В руководство входят полная архитектура, правила чтения графа,
 inputs, 28 controls, модели, prompts, SDXL, ControlNet, IPAdapter/LoRA, четыре
@@ -18,11 +18,11 @@ upscale/overlay, output, diagnostics, checklist, examples, интерактив�
 
 1. **Part I · Workflow Engineering for ComfyUI** — Node Literacy, Graph Literacy, Groups & Naming Standard, BASE CONFIG, control/data plane, switches/selectors/bypass, execution/queue/cache, LAB 01 Routing Sandbox, LAB 02 BASE CONFIG, LAB 03 Module Contract, modules, contracts, checkpoints и reproducibility.
 2. **Part II · Generative Systems** — SDXL, FLUX, ControlNet, Florence2, SAM2, masks, composite и upscale.
-3. **Part III · Hansen by Timestamps** — production-first reverse engineering по видео; первые главы: 00:39 Production Method, 01:08 Input Data, 02:40 Process 1 TXT2IMG. Главная цель — универсальная логика ComfyUI, а не каталог моделей.
+3. **Part III · Hansen by Timestamps** — production-first reverse engineering по видео; главы: 00:39 Production Method, 01:08 Input Data, 02:40 Process 1 TXT2IMG, 04:23 PEOPLE/PPL, 05:42 Workflow Tips, 06:32 ControlNet/Preprocessors, 07:38 Masks & Detail Conservation. Главная цель — универсальная логика ComfyUI, а не каталог моделей.
 4. **Part IV · Practice Labs** — независимые standalone JSON-модули, упражнения и QC.
 5. **Part V · Master Build** — сборка изученных модулей в большой production workflow.
 
-Current Hansen timestamp coverage: **00:39 → 02:40**. Следующие смысловые блоки добавляются последовательно по showcase, без превращения учебника в каталог моделей.
+Current Hansen timestamp coverage: **00:39 → 07:38**. Следующие смысловые блоки добавляются последовательно по showcase, без превращения учебника в каталог моделей.
 
 ## Онлайн-версия
 
