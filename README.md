@@ -22,6 +22,8 @@ upscale/overlay, output, diagnostics, checklist, examples, интерактив�
 4. **Part IV · Practice Labs** — независимые standalone JSON-модули, упражнения и QC.
 5. **Part V · Master Build** — сборка изученных модулей в большой production workflow.
 
+Current Hansen timestamp coverage: **00:39 → 02:40**. Следующие смысловые блоки добавляются последовательно по showcase, без превращения учебника в каталог моделей.
+
 ## Онлайн-версия
 
 Актуальная GitHub Pages версия учебника доступна по адресу:
