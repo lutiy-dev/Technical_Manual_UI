@@ -593,6 +593,53 @@ button, input {
   transition: width .35s ease;
 }
 
+.pwa-install-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.pwa-install-hint {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 80;
+  display: grid;
+  grid-template-columns: auto minmax(190px, 290px) auto;
+  gap: 8px;
+  align-items: start;
+  padding: 10px 11px;
+  color: var(--text-soft);
+  border: 1px solid var(--yellow-line);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--surface-raised) 96%, black);
+  box-shadow: var(--shadow);
+  font-size: .72rem;
+  line-height: 1.4;
+}
+
+.pwa-install-hint > svg {
+  margin-top: 2px;
+  color: var(--yellow);
+}
+
+.pwa-install-hint button {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  color: var(--text-faint);
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pwa-install-hint button:hover {
+  color: var(--foreground);
+  background: var(--surface-hover);
+}
+
 .pwa-install-button {
   min-height: 36px;
   gap: 7px;
@@ -3808,5 +3855,17 @@ button, input {
   .pwa-install-button {
     width: 36px;
     padding-inline: 0;
+  }
+}
+
+
+@media (max-width: 720px) {
+  .pwa-install-hint {
+    position: fixed;
+    top: auto;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: 12px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
   }
 }
