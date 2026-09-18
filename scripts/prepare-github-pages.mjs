@@ -13,14 +13,20 @@ const pagesDirectory = path.join(clientDirectory, projectSegment);
 
 await mkdir(pagesDirectory, { recursive: true });
 
-for (const directory of ['assets', 'downloads', 'resources']) {
+for (const directory of ['assets', 'downloads', 'resources', 'icons']) {
   await cp(path.join(clientDirectory, directory), path.join(pagesDirectory, directory), {
     recursive: true,
     force: true,
   });
 }
 
-for (const file of ['favicon.svg', '404.html']) {
+for (const file of [
+  'favicon.svg',
+  '404.html',
+  'manifest.webmanifest',
+  'sw.js',
+  'pwa-install-capture.js',
+]) {
   await copyFile(path.join(clientDirectory, file), path.join(pagesDirectory, file));
 }
 
@@ -35,7 +41,12 @@ await copyFile(
 
 const routeFiles = await readdir(pagesDirectory, { withFileTypes: true });
 for (const entry of routeFiles) {
-  if (!entry.isFile() || !entry.name.endsWith('.html') || entry.name === 'index.html' || entry.name === '404.html') {
+  if (
+    !entry.isFile() ||
+    !entry.name.endsWith('.html') ||
+    entry.name === 'index.html' ||
+    entry.name === '404.html'
+  ) {
     continue;
   }
 
