@@ -1,4 +1,5 @@
 import { baseGenerationChapters } from './base-generation';
+import { coursePracticeLabChapters } from './course-practice-labs';
 import { finalPipelineChapters } from './final-pipeline';
 import { foundationChapters } from './foundation';
 import { hansenTimestampChapters01 } from './hansen-timestamps-01';
@@ -46,10 +47,12 @@ export const additionalChapters = [
   ...peoplePplWorkflow01Chapters,
   ...peoplePplAdditions,
   ...finalPipelineChapters,
+  ...coursePracticeLabChapters,
 ];
 
 export {
   baseGenerationChapters,
+  coursePracticeLabChapters,
   finalPipelineChapters,
   foundationChapters,
   hansenTimestampChapters01,
