@@ -28,6 +28,52 @@ Current Hansen timestamp coverage: **00:39 → 14:43 · COMPLETE**. Таймко
 
 **Practice coverage:** после педагогического аудита каждый крупный слой курса имеет hands-on закрепление: graph/routing, BASE CONFIG, module contracts, Foundation/master reading, generative systems, PEOPLE/PPL и final delivery. Финальная проверка — Capstone на перенос навыка на незнакомый graph.
 
+## PWA · устанавливаемое приложение
+
+Учебник работает как Progressive Web App:
+
+- устанавливается на desktop и Android без магазина приложений;
+- запускается в `standalone` режиме без обычной браузерной строки;
+- использует EPS-branded launcher icons;
+- регистрирует service worker;
+- сохраняет лёгкий app shell / посещённые страницы, не заполняя кэш тяжёлыми `downloads/` и `resources/`;
+- использует нативный browser install prompt, когда он доступен.
+
+Критический опыт эксплуатации: наличие `manifest.webmanifest`, `sw.js` и `icons/` в `public/` недостаточно. Они должны быть явно включены в итоговый GitHub Pages artifact через `scripts/prepare-github-pages.mjs`. Иначе Android может создать generic browser shortcut вместо полноценного EPS PWA.
+
+При тестировании новой launcher icon на Android старую установленную версию нужно удалить перед повторной установкой из-за launcher/browser cache.
+
+## ChatGPT · Репетитор
+
+В PWA добавлен Tutor Bridge:
+
+`EPS Manual → current chapter/section context → clipboard → learner's own ChatGPT`
+
+Сайт отслеживает текущую главу/секцию, готовит учебный контекст и открывает ChatGPT. OpenAI API владельца курса для этого не используется.
+
+Главный финансовый/архитектурный принцип:
+
+> **Каждый учащийся использует свой ChatGPT. Владелец учебника не оплачивает inference всех пользователей через единый API key.**
+
+Будущий слой:
+
+`ChatGPT Plugin/App → read-only EPS Manual MCP → canonical course data`
+
+Спецификация: [`docs/EPS_COMFYUI_TUTOR_PLUGIN_SPEC.md`](./docs/EPS_COMFYUI_TUTOR_PLUGIN_SPEC.md).
+
+## Инструкции и project-local skills
+
+Главная инструкция для агентов и разработчиков:
+
+- [`AGENTS.md`](./AGENTS.md)
+
+Project-local skills:
+
+- [`skills/eps-course-authoring/SKILL.md`](./skills/eps-course-authoring/SKILL.md) — педагогика и контент;
+- [`skills/eps-manual-maintenance/SKILL.md`](./skills/eps-manual-maintenance/SKILL.md) — routing/build/deploy/QC;
+- [`skills/eps-pwa-release/SKILL.md`](./skills/eps-pwa-release/SKILL.md) — PWA install, icons, Pages artifact;
+- [`skills/eps-tutor/SKILL.md`](./skills/eps-tutor/SKILL.md) — Tutor Bridge, Plugin/MCP contract.
+
 ## Онлайн-версия
 
 Актуальная GitHub Pages версия учебника доступна по адресу:
@@ -65,6 +111,10 @@ npm run build
 
 `CONTENT → manualChapters → ROUTE → SIDEBAR/COUNTER → BUILD → DEPLOY → VISUAL CHECK`
 
+Для PWA:
+
+`SOURCE → BUILD → PAGES ASSEMBLY → DEPLOY → ARTIFACT CHECK → FRESH INSTALL TEST`
+
 Полный обязательный чек-лист хранится в [`MAINTENANCE_RULES.md`](./MAINTENANCE_RULES.md).
 
-Нельзя сообщать, что учебник обновлён, если новая глава есть только в исходниках, но не подключена к `manualChapters`, не появилась в sidebar/счётчике страниц или не проверена после GitHub Pages deploy.
+Нельзя сообщать, что учебник или приложение обновлены, если изменение есть только в исходниках, но не подтверждено в опубликованной сборке.
