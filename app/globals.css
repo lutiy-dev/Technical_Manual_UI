@@ -474,6 +474,27 @@ button, input {
   transition: width .35s ease;
 }
 
+.pwa-install-button {
+  min-height: 36px;
+  gap: 7px;
+  color: #171500;
+  border: 1px solid color-mix(in srgb, var(--yellow) 72%, transparent);
+  background: var(--yellow);
+  font-size: .82rem;
+  font-weight: 800;
+  box-shadow: 0 8px 24px rgba(255, 212, 0, .08);
+}
+
+.pwa-install-button:hover {
+  color: #171500;
+  background: color-mix(in srgb, var(--yellow) 88%, white);
+}
+
+.pwa-install-button:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
+}
+
 .topbar-resource-link {
   display: inline-flex;
   align-items: center;
@@ -3637,5 +3658,36 @@ button, input {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+}
+
+
+@media (display-mode: standalone) {
+  html,
+  body {
+    min-height: 100%;
+    overscroll-behavior-y: none;
+  }
+
+  .manual-topbar {
+    min-height: calc(64px + env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top);
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+
+  .manual-sidebar-header {
+    padding-top: max(14px, env(safe-area-inset-top));
+  }
+}
+
+@media (max-width: 720px) {
+  .pwa-install-button span {
+    display: none;
+  }
+
+  .pwa-install-button {
+    width: 36px;
+    padding-inline: 0;
   }
 }
