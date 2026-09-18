@@ -1,5 +1,17 @@
 # EPSPOZICIYA ARCHVIZ · TECHNICAL WORKFLOW MANUAL
 
+[![Paul Hansen · Archviz x AI Free ComfyUI SDXL x FLUX Workflow — Showcase](https://img.youtube.com/vi/6aXJqRhjXo0/maxresdefault.jpg)](https://www.youtube.com/watch?v=6aXJqRhjXo0)
+
+## COURSE RESOURCES
+
+| Resource | Link | Purpose |
+| --- | --- | --- |
+| ▶ **Original Hansen Video** | [Watch on YouTube](https://www.youtube.com/watch?v=6aXJqRhjXo0) | Исходный showcase, который разбирается в курсе по таймкодам |
+| ⬇ **Original Hansen Workflow / JSON** | [Official workflow download](https://civitai.com/models/920108/phs-archviz-x-ai-comfyui-workflow-sdxl-flux) | Оригинальный workflow Paul Hansen для практики |
+| 📘 **EPS Technical Manual** | [Open the manual](https://lutiy-dev.github.io/Technical_Manual_UI/) | Учебник, Labs, Capstone и Tutor Bridge |
+
+> **Practice rule:** original Hansen workflow = immutable reference. Не редактируйте оригинал напрямую — перед упражнениями сделайте рабочую копию.
+
 Интерактивный технический учебник по полному графу workflow
 `Epspoziciya_archviz_ph_sdxlflux_v001`. PEOPLE/PPL сохранён как отдельный
 учебный модуль внутри общей архитектуры.
