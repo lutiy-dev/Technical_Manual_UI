@@ -57,6 +57,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
+      <head>
+        <script src={withBasePath('/pwa-install-capture.js')} />
+      </head>
       <body>{children}</body>
     </html>
   );
