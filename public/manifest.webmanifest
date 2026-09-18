@@ -6,11 +6,13 @@
   "start_url": "./overview/",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone"],
   "background_color": "#0b0d10",
   "theme_color": "#ffd400",
   "orientation": "any",
   "lang": "ru",
   "dir": "ltr",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "./icons/eps-192.png",
@@ -22,7 +24,13 @@
       "src": "./icons/eps-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/eps-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
