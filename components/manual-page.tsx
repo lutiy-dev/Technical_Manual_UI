@@ -67,6 +67,7 @@ import {
 import { FullGraphVisual, hasFullGraphVisual } from '@/components/full-graph-visuals';
 import { ManualNodeIndex } from '@/components/manual-node-index';
 import { PwaInstall } from '@/components/pwa-install';
+import { TutorBridge } from '@/components/tutor-bridge';
 import {
   type Chapter,
   type EvidenceStatus,
@@ -830,7 +831,7 @@ const categoryLabels: Record<ManualCategory, string> = {
 
 const categoryOrder = Object.keys(categoryLabels) as ManualCategory[];
 
-function SideNavigation({ activeSlug }: { activeSlug: string }) {
+function SideNavigation({ activeSlug, chapter }: { activeSlug: string; chapter: Chapter }) {
   return (
     <Sidebar className="manual-sidebar" collapsible="offcanvas">
       <SidebarHeader className="manual-sidebar-header">
@@ -868,6 +869,7 @@ function SideNavigation({ activeSlug }: { activeSlug: string }) {
         ))}
       </SidebarContent>
       <SidebarFooter className="manual-sidebar-footer">
+        <TutorBridge chapter={chapter} />
         <div className="source-card">
           <span className="micro-label">SOURCE OF TRUTH</span>
           <strong>252 nodes · 341 links</strong>
@@ -917,7 +919,7 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
 
   return (
     <SidebarProvider className="manual-app" style={{ '--sidebar-width': '17.25rem' } as React.CSSProperties}>
-      <SideNavigation activeSlug={chapter.slug} />
+      <SideNavigation activeSlug={chapter.slug} chapter={chapter} />
       <SidebarInset className="manual-inset">
         <header className="manual-topbar">
           <div className="topbar-left">
