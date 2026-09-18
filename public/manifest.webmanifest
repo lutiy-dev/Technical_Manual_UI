@@ -1,0 +1,45 @@
+{
+  "name": "EPSPOZICIYA ARCHVIZ · ComfyUI Technical Manual",
+  "short_name": "EPS Manual",
+  "description": "Фундаментальный учебник по ComfyUI для архитектурной визуализации: workflow engineering, Hansen graph, PEOPLE/PPL, ControlNet, FLUX и production practice.",
+  "id": "./",
+  "start_url": "./overview/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0d10",
+  "theme_color": "#ffd400",
+  "orientation": "any",
+  "lang": "ru",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "./icons/eps-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/eps-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Начать обучение",
+      "short_name": "Старт",
+      "url": "./workflow-engineering-overview/"
+    },
+    {
+      "name": "PEOPLE / PPL",
+      "short_name": "PEOPLE",
+      "url": "./ppl-workflow-01-generate-place/"
+    },
+    {
+      "name": "Capstone · Master Graph",
+      "short_name": "Capstone",
+      "url": "./capstone-master-graph-certification/"
+    }
+  ]
+}
