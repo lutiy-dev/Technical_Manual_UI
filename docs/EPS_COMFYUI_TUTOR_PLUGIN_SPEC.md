@@ -1,10 +1,16 @@
 # EPS ComfyUI Tutor Plugin · Product / Teaching Specification
 
-Status: **DESIGN SPEC · not yet an installable plugin**
+Status: **ACTIVE DESIGN + BRIDGE IMPLEMENTED · Plugin/MCP not yet published**
 
-This document defines the future ChatGPT plugin for the EPSPOZICIYA ARCHVIZ · Technical Workflow Manual.
+This document defines the teaching and integration contract for the future ChatGPT plugin/app that accompanies the EPSPOZICIYA ARCHVIZ · Technical Workflow Manual.
 
-## 1. Purpose
+## 1. Product model
+
+The learning system has three layers:
+
+1. **EPS Manual PWA** — canonical course interface and source of truth.
+2. **Tutor Bridge** — current working bridge from the visible chapter/section to the learner's own ChatGPT.
+3. **Future Plugin/App + read-only MCP** — direct structured access to the manual without requiring copy/paste context.
 
 The plugin is not a generic ComfyUI assistant. It is a teaching layer for one fundamental course.
 
@@ -12,15 +18,44 @@ Core doctrine:
 
 > We do not study all of ComfyUI. We study the production system and the reusable thinking patterns behind it.
 
-The plugin should help a beginner move from “I see a scary graph” to “I can read, explain, test and debug an unfamiliar workflow”.
+The learner should move from “I see a scary graph” to “I can read, explain, test and debug an unfamiliar workflow”.
 
 ## 2. Cost / account model
 
-The plugin must not depend on the course owner’s OpenAI API key.
+The tutor must **not** depend on the course owner's OpenAI API key for learner conversations.
 
-Each learner uses their own ChatGPT account. The website only provides course context and, later, a read-only MCP data source.
+Each learner uses their own ChatGPT account.
 
-## 3. Teaching behavior
+Current bridge:
+
+`EPS Manual → context copy → learner's ChatGPT`
+
+Future integration:
+
+`ChatGPT Plugin/App → EPS Manual MCP → course data`
+
+The course owner may pay for hosting small read-only infrastructure if needed, but not for every learner's model inference.
+
+## 3. Current Tutor Bridge · implemented
+
+The PWA currently tracks:
+
+- course page/category;
+- chapter title;
+- chapter slug;
+- current visible section;
+- section id;
+- a short excerpt/material summary;
+- teaching-mode instructions.
+
+The bridge provides two actions:
+
+- **Open Tutor** — copy context, then open ChatGPT;
+- **Copy Context** — copy only, useful when the learner already has an active course chat.
+
+No owner OpenAI API key is used.
+
+## 4. Teaching behavior
 
 The tutor should:
 
@@ -46,24 +81,26 @@ The tutor should:
 8. Never invent importable ComfyUI JSON when exact node serialization is unavailable.
 9. Teach debugging through the first incorrect checkpoint, not random parameter changes.
 10. Encourage one-variable A/B tests with fixed seed/input.
+11. Do not advance merely because text was read; advance when the learner can explain or apply the concept.
+12. Treat Labs and Capstone as competency checks, not decorative appendices.
 
-## 4. Tutor commands
+## 5. Tutor commands
 
 Suggested quick actions:
 
 - **Explain simpler** — explain current section using simpler language and one analogy.
 - **Show in Hansen** — map the current concept to the Hansen master workflow.
 - **Why is this node here?** — explain purpose, input, output, upstream and downstream role.
-- **Quiz me** — ask 2–4 short questions without revealing answers immediately.
+- **Quiz me** — ask 2–4 short objective questions without revealing answers immediately.
 - **Give exercise** — provide one practical task using the current course material.
-- **Check my answer** — evaluate the learner’s explanation and identify one missing concept.
+- **Check my answer** — evaluate the learner’s explanation and identify the missing concept.
 - **What to remember** — reduce the current section to 3–5 durable rules.
 - **Debug this** — guide from symptom → last correct checkpoint → first incorrect checkpoint.
 - **Next step** — only advance when the current concept is sufficiently understood.
 
-## 5. Context contract from the website
+## 6. Context contract from the website
 
-Current manual-side bridge can provide:
+Current manual-side bridge provides:
 
 - course page number
 - category
@@ -83,15 +120,15 @@ Future optional fields:
 - last study date
 - current device
 
-## 6. Future read-only MCP interface
+Do not transmit sensitive user data that is unnecessary for teaching.
 
-The preferred future architecture is:
+## 7. Future read-only MCP interface
 
-`ChatGPT Plugin → EPS Manual MCP → Technical Manual repository/data`
+Preferred architecture:
+
+`ChatGPT Plugin/App → EPS Manual MCP → Technical Manual repository/data`
 
 No write access is required for v1.
-
-Proposed MCP tools:
 
 ### search_manual
 
@@ -163,9 +200,23 @@ Output:
 - serialized values when confirmed
 - chapters that explain it
 
-## 7. Safety / evidence rules
+## 8. MCP response principles
 
-The tutor must never present an inferred topology or model behavior as confirmed.
+MCP responses should be:
+
+- read-only;
+- compact;
+- source-grounded;
+- structured;
+- explicit about evidence level;
+- stable enough for tutor prompting;
+- independent of visual UI wording where possible.
+
+A tool should not return “best guesses” as graph facts.
+
+## 9. Safety / evidence rules
+
+The tutor must never present inferred topology or model behavior as confirmed.
 
 The three evidence labels remain authoritative:
 
@@ -175,13 +226,11 @@ The three evidence labels remain authoritative:
 
 When a question exceeds the manual, the tutor should explicitly say it is going beyond the course source.
 
-## 8. User experience
+## 10. User experience
 
 Desktop:
 
 `MANUAL | CONTENT | CHATGPT TUTOR`
-
-The tutor can be opened from the manual sidebar. The website copies the current study context and opens ChatGPT.
 
 Mobile:
 
@@ -189,27 +238,42 @@ Mobile:
 - one tap copies context and opens ChatGPT
 - second action copies context only
 
-Future plugin + MCP removes the manual copy/paste step.
+Future Plugin/App + MCP should remove the manual copy/paste step while preserving the same teaching context contract.
 
-## 9. Definition of done for future plugin
+## 11. Distribution rule
 
-A plugin version is complete when a new learner can:
+Do not hard-code assumptions such as “Business always publishes to Plus” or “Plus always supports custom MCP”.
 
-1. install/connect the plugin in their own ChatGPT;
+OpenAI account, workspace, plugin/app, and distribution rules can change.
+
+Before any real publication step:
+
+1. check current official OpenAI documentation;
+2. verify the actual capabilities of the publishing workspace/account;
+3. distinguish internal workspace distribution from public directory distribution;
+4. test installation from a separate learner account.
+
+## 12. Definition of done for future plugin/app
+
+A plugin/app version is complete when a new learner can:
+
+1. install/connect it in their own ChatGPT, where supported;
 2. ask about any course chapter by name;
-3. retrieve the exact current manual content through read-only tools;
+3. retrieve exact current manual content through read-only tools;
 4. receive beginner-appropriate explanations following EPS pedagogy;
 5. complete a lab with checkpoints and pass criteria;
-6. move to another device without relying on the course owner’s API key.
+6. use their own ChatGPT account rather than the course owner's inference budget;
+7. reproduce the experience on a second device/account under the supported distribution model.
 
-## 10. Non-goals
+## 13. Non-goals
 
-Do not turn the plugin into:
+Do not turn the tutor into:
 
 - a marketplace of ComfyUI models;
 - a generic prompt generator;
 - an autonomous workflow mutator;
 - a tool that installs arbitrary custom nodes;
-- an API proxy billed to the course owner.
+- an API proxy billed to the course owner;
+- a hidden source of undocumented graph modifications.
 
-The plugin exists to teach transferable ComfyUI thinking.
+The tutor exists to teach transferable ComfyUI thinking.
