@@ -66,6 +66,7 @@ import {
 } from '@/components/manual-visuals';
 import { FullGraphVisual, hasFullGraphVisual } from '@/components/full-graph-visuals';
 import { ManualNodeIndex } from '@/components/manual-node-index';
+import { PwaInstall } from '@/components/pwa-install';
 import {
   type Chapter,
   type EvidenceStatus,
@@ -928,6 +929,7 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
             <i><b style={{ width: `${pageProgress}%` }} /></i>
           </div>
           <div className="topbar-actions">
+            <PwaInstall />
             <a className="topbar-resource-link" href={withBasePath('/resources')}><FileArchive size={16} /> Файлы</a>
             <ThemeToggle />
           </div>
