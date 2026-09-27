@@ -1,6 +1,12 @@
-import { ManualPage } from '@/components/manual-page';
-import { manualChapters } from '@/lib/manual-data';
+import { ManualPageEn } from '@/components/manual-page-en';
+import { LocalePreferenceRedirect } from '@/components/language-switch';
+import { manualChapters } from '@/lib/manual-data-en';
 
 export default function GitHubPagesHome() {
-  return <ManualPage chapter={manualChapters[0]} />;
+  return (
+    <>
+      <LocalePreferenceRedirect />
+      <ManualPageEn chapter={manualChapters[0]} />
+    </>
+  );
 }
