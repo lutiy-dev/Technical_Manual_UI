@@ -3869,3 +3869,41 @@ button, input {
     grid-template-columns: auto minmax(0, 1fr) auto;
   }
 }
+
+
+/* International edition language switch */
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 8px;
+  color: var(--text-faint);
+  border-radius: 8px;
+  font: 800 .72rem/1 var(--font-mono);
+  letter-spacing: .06em;
+}
+
+.language-switch a {
+  color: var(--text-faint);
+  transition: color .18s ease, opacity .18s ease;
+}
+
+.language-switch a:hover {
+  color: var(--foreground);
+}
+
+.language-switch a.active {
+  color: var(--yellow);
+}
+
+.language-switch > span[aria-hidden="true"] {
+  color: var(--border-strong);
+}
+
+@media (max-width: 720px) {
+  .language-switch {
+    gap: 4px;
+    padding-inline: 4px;
+  }
+}

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ManualPage } from '@/components/manual-page';
-import { chapterBySlug, manualChapters } from '@/lib/manual-data';
+import { ManualPageEn } from '@/components/manual-page-en';
+import { chapterBySlug, manualChapters } from '@/lib/manual-data-en';
 
 export function generateStaticParams() {
   return manualChapters.map((chapter) => ({ slug: chapter.slug }));
@@ -17,7 +17,7 @@ export async function generateMetadata({
   if (!chapter) return {};
 
   return {
-    title: `${chapter.navTitle} · EPSPOZICIYA ARCHVIZ Manual`,
+    title: `${chapter.navTitle} · ARCHVIZ × AI · ComfyUI Technical Workflow Manual`,
     description: chapter.lede,
   };
 }
@@ -31,5 +31,5 @@ export default async function GitHubPagesChapterRoute({
   const chapter = chapterBySlug[slug];
 
   if (!chapter) notFound();
-  return <ManualPage chapter={chapter} />;
+  return <ManualPageEn chapter={chapter} />;
 }

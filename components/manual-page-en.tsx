@@ -63,11 +63,11 @@ import {
   LegacyInfographicDownloads,
   OutputVisual,
   ReactInfographicAtlas,
-} from '@/components/manual-visuals';
-import { FullGraphVisual, hasFullGraphVisual } from '@/components/full-graph-visuals';
-import { ManualNodeIndex } from '@/components/manual-node-index';
-import { PwaInstall } from '@/components/pwa-install';
-import { TutorBridge } from '@/components/tutor-bridge';
+} from '@/components/manual-visuals-en';
+import { FullGraphVisual, hasFullGraphVisual } from '@/components/full-graph-visuals-en';
+import { ManualNodeIndexEn } from '@/components/manual-node-index-en';
+import { PwaInstall } from '@/components/pwa-install-en';
+import { TutorBridge } from '@/components/tutor-bridge-en';
 import {
   type Chapter,
   type EvidenceStatus,
@@ -77,13 +77,9 @@ import {
   manualChapters,
   sourceRoot,
   upstreamResources,
-} from '@/lib/manual-data';
+} from '@/lib/manual-data-en';
 import { withBasePath } from '@/lib/site-path';
 import { LanguageSwitch } from '@/components/language-switch';
-
-function withRuPath(path: string) {
-  return withBasePath(`/ru${path}`);
-}
 
 const statusCopy: Record<
   EvidenceStatus,
@@ -92,17 +88,17 @@ const statusCopy: Record<
   confirmed: {
     label: 'CONFIRMED',
     icon: CheckCircle2,
-    short: 'Доказано graph data / topology',
+    short: 'Proven by graph data / topology',
   },
   inferred: {
     label: 'INFERRED',
     icon: CircleHelp,
-    short: 'Практический вывод из структуры',
+    short: 'Practical inference from the structure',
   },
   'not-confirmed': {
     label: 'NOT CONFIRMED',
     icon: CircleX,
-    short: 'Нужен runtime / preview',
+    short: 'Requires runtime / preview',
   },
 };
 
@@ -128,7 +124,7 @@ function ThemeToggle() {
 
   useEffect(() => {
     const stored =
-      window.localStorage.getItem('epspoziciya-manual-theme') ??
+      window.localStorage.getItem('archviz-ai-manual-theme') ??
       window.localStorage.getItem('ppl-manual-theme');
     const preferred =
       stored === 'dark' || stored === 'light'
@@ -144,7 +140,7 @@ function ThemeToggle() {
     const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
     document.documentElement.dataset.theme = next;
-    window.localStorage.setItem('epspoziciya-manual-theme', next);
+    window.localStorage.setItem('archviz-ai-manual-theme', next);
   }
 
   return (
@@ -153,8 +149,8 @@ function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}
-      title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
+      aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+      title={theme === 'dark' ? 'Light theme' : 'Dark theme'}
     >
       {theme === 'dark' ? <Sun /> : <Moon />}
     </Button>
@@ -169,7 +165,7 @@ function FlowStrip({
   active?: string[];
 }) {
   return (
-    <figure className="flow-strip" aria-label={steps.map((step) => step.label).join(', затем ')}>
+    <figure className="flow-strip" aria-label={steps.map((step) => step.label).join(', then ')}>
       {steps.map((step, index) => (
         <div className="flow-piece" key={`${step.id}-${index}`}>
           <div
@@ -193,7 +189,7 @@ function OverviewVisual() {
       <div className="visual-card-head">
         <div>
           <span className="micro-label">ACTIVE ROUTE · MODE 1</span>
-          <h2>Сигнал от prompt до текущего output</h2>
+          <h2>Signal from prompt to the current output</h2>
         </div>
         <span className="live-chip"><span /> graph topology</span>
       </div>
@@ -212,8 +208,8 @@ function OverviewVisual() {
       <div className="visual-footnote">
         <CircleAlert size={16} />
         <p>
-          HQ / upscale / overlay chain существует, но nodes 832–851 сохранены в <b>BYPASS</b>.
-          Поэтому текущую проверку завершай на decode 53 / save 730.
+          The HQ / upscale / overlay chain exists, but nodes 832–851 are stored in <b>BYPASS</b>.
+          For the current profile, complete verification at decode 53 / save 730.
         </p>
       </div>
     </div>
@@ -226,7 +222,7 @@ function PromptVisual() {
       <div className="visual-card-head">
         <div>
           <span className="micro-label">STRING ASSEMBLY</span>
-          <h2>Из четырёх источников в один PPL conditioning</h2>
+          <h2>Four sources assembled into one PPL conditioning</h2>
         </div>
         <EvidenceBadge status="confirmed" compact />
       </div>
@@ -267,7 +263,7 @@ function GenerationVisual() {
       <div className="visual-card-head">
         <div>
           <span className="micro-label">FLUX PEOPLE STACK</span>
-          <h2>От loader до preview 409</h2>
+          <h2>From loader to Preview 409</h2>
         </div>
         <Zap className="accent-icon" />
       </div>
@@ -299,8 +295,8 @@ function GenerationVisual() {
         </div>
       </div>
       <p className="visual-caption">
-        Названия loader-файлов подтверждены JSON; их фактическое наличие на машине этим архивом
-        не проверяется.
+        Loader filenames are confirmed by the JSON; this archive does not verify whether those files are installed
+        on the current machine.
       </p>
     </div>
   );
@@ -312,7 +308,7 @@ function MaskVisual() {
       <div className="visual-card-head">
         <div>
           <span className="micro-label">MASK PIPELINE</span>
-          <h2>Детекция, уточнение и мягкий край</h2>
+          <h2>Detection, refinement and a softened edge</h2>
         </div>
         <SearchCheck className="accent-icon" />
       </div>
@@ -329,8 +325,8 @@ function MaskVisual() {
         ]}
       />
       <div className="mask-legend">
-        <span><i className="mask-white" /> фигура остаётся</span>
-        <span><i className="mask-black" /> фон исключается</span>
+        <span><i className="mask-white" /> figure retained</span>
+        <span><i className="mask-black" /> background excluded</span>
         <span><i className="mask-edge" /> feathered edge</span>
       </div>
     </div>
@@ -343,7 +339,7 @@ function PreparationVisual() {
       <div className="visual-card-head">
         <div>
           <span className="micro-label">PREPARATION CHAIN</span>
-          <h2>Cutout получает цвет окружения до paste</h2>
+          <h2>Cutout is matched to the environment before paste</h2>
         </div>
         <Layers3 className="accent-icon" />
       </div>
@@ -378,7 +374,7 @@ function SelectorVisual() {
       <div className="visual-card-head">
         <div>
           <span className="micro-label">LINKED CONTROL TREE</span>
-          <h2>543 = 1 управляет четырьмя switches</h2>
+          <h2>543 = 1 drives four switches</h2>
         </div>
         <GitBranch className="accent-icon" />
       </div>
@@ -407,8 +403,8 @@ function SelectorVisual() {
       <div className="nested-note">
         <span className="logic-pill">NESTED SWITCH</span>
         <p>
-          При mode 1 node 552 выбирает свой image1 #829, поэтому output 715 не участвует. При
-          mode 2 оба switches выбирают второй вход, и 715 передаёт SDXL decode #14 в 552.
+          In mode 1, node 552 selects its own image1 #829, so output 715 does not participate. In
+          mode 2, both switches select their second input and 715 passes SDXL decode #14 into 552.
         </p>
       </div>
     </div>
@@ -421,7 +417,7 @@ function CompositeVisual() {
       <div className="visual-card-head">
         <div>
           <span className="micro-label">COMPOSITING</span>
-          <h2>Два маршрута сходятся в selector 459</h2>
+          <h2>Two routes converge at selector 459</h2>
         </div>
         <Layers3 className="accent-icon" />
       </div>
@@ -468,7 +464,7 @@ function DiagnosticsVisual() {
       <div className="visual-card-head">
         <div>
           <span className="micro-label">FIVE-PROBE TEST</span>
-          <h2>Последний правильный preview задаёт следующую проверку</h2>
+          <h2>The last correct preview determines the next check</h2>
         </div>
         <SearchCheck className="accent-icon" />
       </div>
@@ -483,7 +479,7 @@ function DiagnosticsVisual() {
         ))}
       </div>
       <p className="diagnostic-rule">
-        Если этап N корректен, не возвращайся к prompt: проверяй соединение и параметры этапа N+1.
+        If stage N is correct, do not return to the prompt; inspect the connection and parameters of stage N+1.
       </p>
     </div>
   );
@@ -494,7 +490,7 @@ function ChecklistPanel() {
 
   useEffect(() => {
     const saved =
-      window.localStorage.getItem('epspoziciya-manual-checklist') ??
+      window.localStorage.getItem('archviz-ai-manual-checklist') ??
       window.localStorage.getItem('ppl-manual-checklist');
     if (saved) {
       try {
@@ -529,10 +525,10 @@ function ChecklistPanel() {
       void Promise.resolve(
         context.registerTool(
           {
-            name: 'set_epspoziciya_workflow_checklist',
-            title: 'Обновить EPSPOZICIYA workflow checklist',
+            name: 'set_archviz_ai_workflow_checklist',
+            title: 'Update ARCHVIZ × AI workflow checklist',
             description:
-              'Заменяет отмеченные пункты диагностического чек-листа на видимой странице. Передайте массив ID; пустой массив сбрасывает прогресс.',
+              'Replaces the completed items in the visible diagnostic checklist. Pass an array of IDs; an empty array resets progress.',
             inputSchema: {
               type: 'object',
               properties: {
@@ -560,7 +556,7 @@ function ChecklistPanel() {
               }
               const next = [...new Set(value.completedIds as string[])];
               setChecked(next);
-              window.localStorage.setItem('epspoziciya-manual-checklist', JSON.stringify(next));
+              window.localStorage.setItem('archviz-ai-manual-checklist', JSON.stringify(next));
               return {
                 completedIds: next,
                 completedCount: next.length,
@@ -582,12 +578,12 @@ function ChecklistPanel() {
   function update(id: string, value: boolean) {
     const next = value ? [...new Set([...checked, id])] : checked.filter((item) => item !== id);
     setChecked(next);
-    window.localStorage.setItem('epspoziciya-manual-checklist', JSON.stringify(next));
+    window.localStorage.setItem('archviz-ai-manual-checklist', JSON.stringify(next));
   }
 
   function reset() {
     setChecked([]);
-    window.localStorage.removeItem('epspoziciya-manual-checklist');
+    window.localStorage.removeItem('archviz-ai-manual-checklist');
     window.localStorage.removeItem('ppl-manual-checklist');
   }
 
@@ -596,14 +592,14 @@ function ChecklistPanel() {
       <div className="checklist-progress">
         <div>
           <span className="micro-label">LOCAL CHECKLIST</span>
-          <h2>{checked.length} из {diagnosticChecklist.length} проверок</h2>
+          <h2>{checked.length} of {diagnosticChecklist.length} checks</h2>
         </div>
         <Button variant="outline" onClick={reset}>
-          <RotateCcw /> Сбросить
+          <RotateCcw /> Reset
         </Button>
       </div>
       <Progress value={percent} className="manual-progress">
-        <ProgressLabel>Готовность workflow</ProgressLabel>
+        <ProgressLabel>Workflow readiness</ProgressLabel>
         <span className="progress-value">{percent}%</span>
       </Progress>
       <div className="checklist-list">
@@ -626,7 +622,7 @@ function ChecklistPanel() {
         })}
       </div>
       <p className="storage-note">
-        Состояние сохраняется в localStorage этого браузера. Workflow и файлы ComfyUI не изменяются.
+        State is stored in this browser's localStorage. The ComfyUI workflow and files are not modified.
       </p>
     </div>
   );
@@ -637,13 +633,13 @@ function ResourcesVisual() {
     {
       title: 'HANSEN_MASTER_MAP.svg',
       href: `${sourceRoot}/HANSEN_MASTER_MAP.svg`,
-      alt: 'Graphviz-карта полной архитектуры Epspoziciya Archviz workflow',
+      alt: 'Graphviz map of the complete ARCHVIZ × AI workflow architecture',
       meta: 'FULL WORKFLOW · 252 NODES',
     },
     {
       title: 'PEOPLE_PPL_ROUTE.svg',
       href: `${sourceRoot}/PEOPLE_PPL_ROUTE.svg`,
-      alt: 'Graphviz-карта PEOPLE / PPL route',
+      alt: 'Graphviz map of the PEOPLE / PPL route',
       meta: 'MODULE DETAIL · PEOPLE / PPL',
     },
   ];
@@ -652,7 +648,7 @@ function ResourcesVisual() {
     <div className="resources-stack">
       <section className="resource-block">
         <div className="resource-heading">
-          <div><span className="micro-label">OFFICIAL / UPSTREAM</span><h2>Проекты</h2></div>
+          <div><span className="micro-label">OFFICIAL / UPSTREAM</span><h2>Projects</h2></div>
           <ExternalLink className="accent-icon" />
         </div>
         <div className="resource-grid">
@@ -677,7 +673,7 @@ function ResourcesVisual() {
       </section>
       <section className="resource-block">
         <div className="resource-heading">
-          <div><span className="micro-label">LOCAL DOWNLOADS</span><h2>Файлы из техархива</h2></div>
+          <div><span className="micro-label">LOCAL DOWNLOADS</span><h2>Technical archive files</h2></div>
           <FileArchive className="accent-icon" />
         </div>
         <div className="download-grid">
@@ -700,7 +696,7 @@ function ResourcesVisual() {
             <div className="resource-heading">
               <div><span className="micro-label">{map.meta}</span><h2>{map.title}</h2></div>
               <a href={withBasePath(map.href)} target="_blank" rel="noreferrer">
-                Открыть SVG <ExternalLink size={15} />
+                Open SVG <ExternalLink size={15} />
               </a>
             </div>
             <div className="svg-frame">
@@ -840,11 +836,11 @@ function SideNavigation({ activeSlug, chapter }: { activeSlug: string; chapter: 
   return (
     <Sidebar className="manual-sidebar" collapsible="offcanvas">
       <SidebarHeader className="manual-sidebar-header">
-        <a className="brand" href={withRuPath('/overview')}>
-          <span className="brand-mark">EPS</span>
+        <a className="brand" href={withBasePath('/overview')}>
+          <span className="brand-mark">AV</span>
           <span className="brand-copy">
-            <strong>EPSPOZICIYA ARCHVIZ</strong>
-            <small>Technical workflow manual</small>
+            <strong>ARCHVIZ × AI</strong>
+            <small>ComfyUI technical workflow manual</small>
           </span>
         </a>
       </SidebarHeader>
@@ -861,7 +857,7 @@ function SideNavigation({ activeSlug, chapter }: { activeSlug: string; chapter: 
                     <SidebarMenuButton
                       className="manual-menu-button"
                       isActive={item.slug === activeSlug}
-                      render={<a href={withRuPath(`/${item.slug}`)} aria-label={item.navTitle} />}
+                      render={<a href={withBasePath(`/${item.slug}`)} aria-label={item.navTitle} />}
                     >
                       <span className="menu-index">{String(item.index).padStart(2, '0')}</span>
                       <span>{item.navTitle}</span>
@@ -879,8 +875,8 @@ function SideNavigation({ activeSlug, chapter }: { activeSlug: string; chapter: 
           <span className="micro-label">SOURCE OF TRUTH</span>
           <strong>252 nodes · 341 links</strong>
           <p>Epspoziciya_archviz_ph_sdxlflux_v001.json</p>
-          <a href={withRuPath('/resources')}>
-            Исходные файлы <ArrowRight size={14} />
+          <a href={withBasePath('/resources')}>
+            Source files <ArrowRight size={14} />
           </a>
         </div>
       </SidebarFooter>
@@ -913,7 +909,7 @@ function PageRail({ chapter }: { chapter: Chapter }) {
   );
 }
 
-export function ManualPage({ chapter }: { chapter: Chapter }) {
+export function ManualPageEn({ chapter }: { chapter: Chapter }) {
   const pageIndex = manualChapters.findIndex((item) => item.slug === chapter.slug);
   const previous = pageIndex > 0 ? manualChapters[pageIndex - 1] : undefined;
   const next = pageIndex < manualChapters.length - 1 ? manualChapters[pageIndex + 1] : undefined;
@@ -929,16 +925,16 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
         <header className="manual-topbar">
           <div className="topbar-left">
             <SidebarTrigger className="sidebar-trigger" />
-            <a className="mobile-brand" href={withRuPath('/overview')}><span>EPS</span> Technical Manual</a>
+            <a className="mobile-brand" href={withBasePath('/overview')}><span>AV</span> ComfyUI Manual</a>
           </div>
-          <div className="topbar-progress" aria-label={`Раздел ${pageIndex + 1} из ${manualChapters.length}`}>
+          <div className="topbar-progress" aria-label={`Section ${pageIndex + 1} of ${manualChapters.length}`}>
             <span>{String(pageIndex + 1).padStart(2, '0')} / {manualChapters.length}</span>
             <i><b style={{ width: `${pageProgress}%` }} /></i>
           </div>
           <div className="topbar-actions">
             <PwaInstall />
-            <LanguageSwitch locale="ru" slug={chapter.slug} />
-            <a className="topbar-resource-link" href={withRuPath('/resources')}><FileArchive size={16} /> Файлы</a>
+            <LanguageSwitch locale="en" slug={chapter.slug} />
+            <a className="topbar-resource-link" href={withBasePath('/resources')}><FileArchive size={16} /> Files</a>
             <ThemeToggle />
           </div>
         </header>
@@ -947,9 +943,9 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
           <article className="manual-article">
             <Breadcrumb className="manual-breadcrumb">
               <BreadcrumbList>
-                <BreadcrumbItem><BreadcrumbLink render={<a href={withRuPath('/overview')} aria-label="Epspoziciya Archviz" />}>Epspoziciya Archviz</BreadcrumbLink></BreadcrumbItem>
+                <BreadcrumbItem><BreadcrumbLink render={<a href={withBasePath('/overview')} aria-label="ARCHVIZ × AI" />}>ARCHVIZ × AI</BreadcrumbLink></BreadcrumbItem>
                 <BreadcrumbSeparator />
-                <BreadcrumbItem><BreadcrumbLink render={<a href={withRuPath(`/${chapter.slug}`)} aria-label={categoryLabels[chapter.category]} />}>{categoryLabels[chapter.category]}</BreadcrumbLink></BreadcrumbItem>
+                <BreadcrumbItem><BreadcrumbLink render={<a href={withBasePath(`/${chapter.slug}`)} aria-label={categoryLabels[chapter.category]} />}>{categoryLabels[chapter.category]}</BreadcrumbLink></BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem><BreadcrumbPage>{chapter.navTitle}</BreadcrumbPage></BreadcrumbItem>
               </BreadcrumbList>
@@ -972,19 +968,19 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
 
             <ArticleSections chapter={chapter} />
 
-            {chapter.slug === 'node-index' && <ManualNodeIndex />}
+            {chapter.slug === 'node-index' && <ManualNodeIndexEn />}
 
             {chapter.slug === 'resources' && (
               <section className="evidence-gallery">
                 <header className="manual-section-head">
                   <span className="micro-label">BUILD EVIDENCE</span>
-                  <h2>Подтверждение source package</h2>
+                  <h2>Source-package evidence</h2>
                 </header>
                 <div className="evidence-images">
                   <a href={withBasePath('/assets/evidence/build-summary-252-nodes.png')} target="_blank" rel="noreferrer">
                     <Image
                       src={withBasePath('/assets/evidence/build-summary-252-nodes.png')}
-                      alt="Сводка исходного пакета: 252 nodes, 341 links, 28 controls, 22 файла до errata и manifest"
+                      alt="Source package summary: 252 nodes, 341 links, 28 controls, 22 files before errata and manifest"
                       width={986}
                       height={743}
                       loading="lazy"
@@ -995,7 +991,7 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
                   <a href={withBasePath('/assets/evidence/source-of-truth-confirmation.png')} target="_blank" rel="noreferrer">
                     <Image
                       src={withBasePath('/assets/evidence/source-of-truth-confirmation.png')}
-                      alt="Подтверждение source of truth workflow"
+                      alt="Source-of-truth workflow confirmation"
                       width={993}
                       height={743}
                       loading="lazy"
@@ -1007,20 +1003,20 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
               </section>
             )}
 
-            <nav className="chapter-navigation" aria-label="Переход между разделами">
+            <nav className="chapter-navigation" aria-label="Chapter navigation">
               {previous ? (
-                <a className="chapter-nav-link previous" href={withRuPath(`/${previous.slug}`)}>
+                <a className="chapter-nav-link previous" href={withBasePath(`/${previous.slug}`)}>
                   <ArrowLeft />
                   <span><small>PREVIOUS</small><strong>{previous.navTitle}</strong></span>
                 </a>
               ) : <span />}
               {next ? (
-                <a className="chapter-nav-link next" href={withRuPath(`/${next.slug}`)}>
+                <a className="chapter-nav-link next" href={withBasePath(`/${next.slug}`)}>
                   <span><small>NEXT</small><strong>{next.navTitle}</strong></span>
                   <ArrowRight />
                 </a>
               ) : (
-                <a className="chapter-nav-link next" href={withRuPath('/overview')}>
+                <a className="chapter-nav-link next" href={withBasePath('/overview')}>
                   <span><small>BACK TO</small><strong>Overview</strong></span>
                   <Workflow />
                 </a>
