@@ -63,9 +63,9 @@ import {
   LegacyInfographicDownloads,
   OutputVisual,
   ReactInfographicAtlas,
-} from '@/components/manual-visuals';
-import { FullGraphVisual, hasFullGraphVisual } from '@/components/full-graph-visuals';
-import { ManualNodeIndex } from '@/components/manual-node-index';
+} from '@/components/manual-visuals-en';
+import { FullGraphVisual, hasFullGraphVisual } from '@/components/full-graph-visuals-en';
+import { ManualNodeIndexEn } from '@/components/manual-node-index-en';
 import { PwaInstall } from '@/components/pwa-install-en';
 import { TutorBridge } from '@/components/tutor-bridge-en';
 import {
@@ -968,7 +968,7 @@ export function ManualPageEn({ chapter }: { chapter: Chapter }) {
 
             <ArticleSections chapter={chapter} />
 
-            {chapter.slug === 'node-index' && <ManualNodeIndex />}
+            {chapter.slug === 'node-index' && <ManualNodeIndexEn />}
 
             {chapter.slug === 'resources' && (
               <section className="evidence-gallery">
