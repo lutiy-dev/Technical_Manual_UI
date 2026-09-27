@@ -1,3 +1,82 @@
+# ARCHVIZ × AI · COMFYUI TECHNICAL WORKFLOW MANUAL
+
+**Production workflows for Architectural Visualization**
+
+[![Paul Hansen · Archviz x AI Free ComfyUI SDXL x FLUX Workflow — Showcase](https://img.youtube.com/vi/6aXJqRhjXo0/maxresdefault.jpg)](https://www.youtube.com/watch?v=6aXJqRhjXo0)
+
+An interactive, production-focused technical manual for understanding and engineering complex ComfyUI workflows in architectural visualization.
+
+The course uses **Paul Hansen's publicly shared Archviz × AI workflow and showcase as an immutable reference for study**. The manual, learning architecture, diagnostics, practice labs, bilingual PWA and supporting documentation are an independent educational project. No affiliation or endorsement is implied.
+
+## Open the manual
+
+**English is the default edition.** The complete Russian edition remains available through the `EN | RU` switch in the top bar.
+
+- 📘 **Live manual:** https://lutiy-dev.github.io/Technical_Manual_UI/
+- ▶ **Original Hansen showcase:** https://www.youtube.com/watch?v=6aXJqRhjXo0
+- ⬇ **Original Hansen workflow / JSON:** https://civitai.com/models/920108/phs-archviz-x-ai-comfyui-workflow-sdxl-flux
+
+> **Practice rule:** keep the original Hansen workflow unchanged. Create a working copy before exercises or experiments.
+
+## What the course covers
+
+The manual contains **64 routes** organized into seven learning groups: Workflow Engineering, Foundation, Base Generation, Hansen by Timestamps, PEOPLE/PPL Module, Final Pipeline, and Evidence & Reference.
+
+Core topics include graph architecture, Node Literacy, Graph Literacy, BASE CONFIG, control/data planes, selectors and bypass, execution/cache, SDXL, FLUX, ControlNet, IPAdapter/LoRA, Florence2, SAM2, four mask systems, detail conservation, PEOPLE/PPL production workflows, diagnostics, reproducibility, output delivery and a searchable 252-node reference.
+
+### Learning architecture
+
+1. **Part I · Workflow Engineering for ComfyUI** — learn to read and design graph systems before focusing on generative nodes.
+2. **Part II · Generative Systems** — SDXL, FLUX, ControlNet, segmentation, masks, compositing and upscale.
+3. **Part III · Hansen by Timestamps** — production-first reverse engineering of the showcase from 00:39 through 14:43.
+4. **Part IV · Practice Labs** — routing, BASE CONFIG, module contracts, master-graph reading, generative benchmarking, PEOPLE/PPL and final delivery.
+5. **Part V · Master Build / Capstone** — read, run, deliberately break and recover the Master Graph without prompts.
+
+The goal is **transferable workflow engineering**, not memorization of one model stack.
+
+## Bilingual PWA
+
+The manual is delivered as a Progressive Web App and can be installed on desktop and Android.
+
+- **EN** — default international edition, written as native technical English rather than a literal translation.
+- **RU** — complete preserved Russian edition.
+- The `EN | RU` switch is available in the top bar and the selected language is stored locally in the browser.
+- Technical identifiers, node names, model filenames and historical source-workflow filenames remain unchanged.
+
+## ChatGPT Tutor Bridge
+
+The Tutor Bridge passes the current chapter/section context to the learner's own ChatGPT session:
+
+`ARCHVIZ × AI Manual → current context → clipboard → learner's ChatGPT`
+
+The course owner does not provide a shared inference API key.
+
+## Development
+
+Node.js 22 or newer is required.
+
+```bash
+npm ci
+npm run build
+```
+
+The static build is generated in `dist/client` and assembled for GitHub Pages by `scripts/prepare-github-pages.mjs`.
+
+## Evidence standard
+
+Technical statements are explicitly classified as:
+
+- **CONFIRMED** — directly supported by graph data, serialized values, runtime evidence or verified source material.
+- **INFERRED** — engineering interpretation supported by structure but not independently runtime-proven.
+- **NOT CONFIRMED** — requires a run, preview, log or additional source evidence.
+
+The project intentionally does not add an open-source license to third-party source material. Rights to original external materials remain with their respective owners.
+
+---
+
+<details>
+<summary><strong>Russian README · preserved source edition</strong></summary>
+
 # EPSPOZICIYA ARCHVIZ · TECHNICAL WORKFLOW MANUAL
 
 [![Paul Hansen · Archviz x AI Free ComfyUI SDXL x FLUX Workflow — Showcase](https://img.youtube.com/vi/6aXJqRhjXo0/maxresdefault.jpg)](https://www.youtube.com/watch?v=6aXJqRhjXo0)
@@ -130,3 +209,6 @@ npm run build
 Полный обязательный чек-лист хранится в [`MAINTENANCE_RULES.md`](./MAINTENANCE_RULES.md).
 
 Нельзя сообщать, что учебник или приложение обновлены, если изменение есть только в исходниках, но не подтверждено в опубликованной сборке.
+
+
+</details>
