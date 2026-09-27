@@ -1916,19 +1916,19 @@ button, input {
 
 .code-accordion {
   margin-top: 27px;
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  background: var(--surface-soft);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .code-accordion [data-slot='accordion-item'] {
-  padding: 0 15px;
-  border-color: var(--border);
+  padding: 0;
+  border: 0;
 }
 
 .code-trigger {
   min-height: 68px;
-  padding: 12px 2px;
+  padding: 12px 17px;
   text-decoration: none !important;
 }
 
@@ -1950,7 +1950,7 @@ button, input {
 }
 
 .code-content {
-  padding-bottom: 15px;
+  padding: 0 15px 15px;
 }
 
 .code-content pre {
@@ -3450,6 +3450,35 @@ button, input {
   }
   .legacy-download-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1180px) {
+  /* React atlas: switch paired cards to a single readable column before they get cramped
+     by the persistent desktop sidebar. */
+  .native-atlas .atlas-grid.two,
+  .native-atlas .atlas-grid.location-row,
+  .native-atlas .atlas-grid.selector-and-matrix {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Keep topology nodes readable and let the route scroll horizontally instead of
+     compressing labels beyond a useful size. */
+  .native-atlas .native-pipeline {
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  .native-atlas .native-pipeline-piece {
+    flex: 0 0 132px;
+    scroll-snap-align: start;
+  }
+
+  .native-atlas .native-pipeline-node {
+    min-width: 116px;
   }
 }
 
