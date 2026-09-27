@@ -2136,6 +2136,24 @@ button, input {
   gap: 26px;
 }
 
+.native-atlas {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  container-type: inline-size;
+  container-name: react-atlas;
+}
+
+.native-atlas > *,
+.native-atlas .atlas-sheet,
+.native-atlas .atlas-grid,
+.native-atlas .atlas-block,
+.native-atlas .atlas-callout,
+.native-atlas .atlas-conclusion {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .native-atlas-intro {
   display: flex;
   align-items: flex-start;
@@ -3454,6 +3472,90 @@ button, input {
   }
   .legacy-download-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Section 61: respond to the actual article width, not only the browser viewport.
+   This keeps the React Atlas stable when the persistent sidebar is opened. */
+@container react-atlas (max-width: 900px) {
+  .native-atlas-intro,
+  .atlas-sheet-head {
+    align-items: flex-start;
+  }
+
+  .atlas-grid.two,
+  .atlas-grid.location-row,
+  .atlas-grid.selector-and-matrix {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .native-pipeline {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+
+  .native-pipeline-piece,
+  .native-pipeline.compact .native-pipeline-piece {
+    flex: 0 0 132px;
+    scroll-snap-align: start;
+  }
+
+  .native-pipeline-node,
+  .native-pipeline.compact .native-pipeline-node {
+    min-width: 116px;
+  }
+
+  .output-example-grid.compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container react-atlas (max-width: 760px) {
+  .native-atlas-intro,
+  .atlas-sheet-head {
+    flex-direction: column;
+  }
+
+  .stage-example-strip {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+
+  .stage-example-strip > div {
+    flex: 0 0 180px;
+    min-width: 180px;
+    scroll-snap-align: start;
+  }
+
+  .stage-example-strip > svg {
+    flex: 0 0 auto;
+    align-self: center;
+    transform: none;
+  }
+
+  .output-example-grid,
+  .output-example-grid.compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container react-atlas (max-width: 520px) {
+  .output-example-grid,
+  .output-example-grid.compact {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
