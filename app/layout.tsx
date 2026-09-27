@@ -8,10 +8,10 @@ const siteUrl =
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: 'EPSPOZICIYA ARCHVIZ · Technical Workflow Manual',
+  title: 'ARCHVIZ × AI · ComfyUI Technical Workflow Manual',
   description:
-    'Интерактивное техническое руководство по полному графу Epspoziciya_archviz_ph_sdxlflux_v001, включая PEOPLE/PPL, SDXL, ControlNet, FLUX и output.',
-  applicationName: 'EPS Manual',
+    'Production-focused ComfyUI manual for architectural visualization: workflow engineering, SDXL/FLUX, ControlNet, masks, PEOPLE/PPL, diagnostics and hands-on labs.',
+  applicationName: 'ARCHVIZ × AI Manual',
   manifest: withBasePath('/manifest.webmanifest'),
   icons: {
     icon: [
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    title: 'EPS Manual',
+    title: 'ARCHVIZ × AI Manual',
     statusBarStyle: 'default',
   },
   other: {
@@ -56,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
+    <html lang="en">
       <head>
         <script src={withBasePath('/pwa-install-capture.js')} />
       </head>
