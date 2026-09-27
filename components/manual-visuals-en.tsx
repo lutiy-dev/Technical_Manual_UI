@@ -466,7 +466,7 @@ function PathResolver() {
         <input
           value={root}
           onChange={(event) => setRoot(event.target.value)}
-          placeholder={String.raw`например: Q:\...\ComfyUI`}
+          placeholder={String.raw`for example: Q:\...\ComfyUI`}
           spellCheck={false}
         />
       </label>
