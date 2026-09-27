@@ -622,7 +622,7 @@ function ChecklistPanel() {
         })}
       </div>
       <p className="storage-note">
-        Состояние сохраняется в localStorage этого браузера. Workflow и файлы ComfyUI не ofменяются.
+        State is stored in this browser's localStorage. The ComfyUI workflow and files are not modified.
       </p>
     </div>
   );
@@ -673,7 +673,7 @@ function ResourcesVisual() {
       </section>
       <section className="resource-block">
         <div className="resource-heading">
-          <div><span className="micro-label">LOCAL DOWNLOADS</span><h2>Files of техархива</h2></div>
+          <div><span className="micro-label">LOCAL DOWNLOADS</span><h2>Technical archive files</h2></div>
           <FileArchive className="accent-icon" />
         </div>
         <div className="download-grid">
