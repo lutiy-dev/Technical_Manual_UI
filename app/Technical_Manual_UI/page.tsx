@@ -1,6 +1,6 @@
-import { ManualPage } from '@/components/manual-page';
-import { manualChapters } from '@/lib/manual-data';
+import { ManualPage } from '@/components/manual-page-en';
+import { manualChapters } from '@/lib/manual-data-en';
 
-export default function GitHubPagesHome() {
+export default function ProjectRootPage() {
   return <ManualPage chapter={manualChapters[0]} />;
 }
