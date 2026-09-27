@@ -127,7 +127,7 @@ export const outputExampleAssets: OutputExampleAsset[] = [
   {
     id: 'atlas-neutral-forest-water',
     stage: 'Neutral study · Forest',
-    src: '/assets/output/archviz-black-cabin-temp.png',
+    src: '/assets/output/atlas-neutral-01.jpg',
     sourcePath: 'Generated neutral placeholder · 2026-09-27',
     projectPath: '/assets/output/atlas-neutral-01.jpg',
     alt: 'Contemporary pavilion in a calm forest landscape above dark water',
@@ -137,7 +137,7 @@ export const outputExampleAssets: OutputExampleAsset[] = [
   {
     id: 'atlas-neutral-interior',
     stage: 'Neutral study · Interior',
-    src: '/assets/output/archviz-amphitheatre-person.png',
+    src: '/assets/output/atlas-neutral-02.jpg',
     sourcePath: 'Generated neutral placeholder · 2026-09-27',
     projectPath: '/assets/output/atlas-neutral-02.jpg',
     alt: 'Contemporary interior lounge with warm light and a forest view',
@@ -157,7 +157,7 @@ export const outputExampleAssets: OutputExampleAsset[] = [
   {
     id: 'atlas-neutral-landscape',
     stage: 'Neutral study · Landscape',
-    src: '/assets/output/archviz-forest-pavilion.png',
+    src: '/assets/output/atlas-neutral-04.jpg',
     sourcePath: 'Generated neutral placeholder · 2026-09-27',
     projectPath: '/assets/output/atlas-neutral-04.jpg',
     alt: 'Contemporary pavilion integrated into a landscaped forest setting',
