@@ -364,7 +364,7 @@ function DiagnosticsSheet() {
   return (
     <AtlasSheet page="03 / 03" eyebrow="REACT REBUILD" title="Diagnostics and checklist">
       <article className="atlas-block wide">
-        <BlockHeading index="01" title="Typeичные точки отказа" icon={<CircleAlert size={19} />} />
+        <BlockHeading index="01" title="Typical failure points" icon={<CircleAlert size={19} />} />
         <div className="failure-card-grid">
           {failurePoints.map(([number, title, text]) => (
             <div className="failure-card" key={number}>
