@@ -1950,7 +1950,11 @@ button, input {
 }
 
 .code-content {
-  padding: 0 15px 15px;
+  margin-top: 4px;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface-soft);
 }
 
 .code-content pre {

@@ -1132,7 +1132,7 @@ export const manualChapters: Chapter[] = [
   }),
   additionalChapter('lab-07-final-pipeline-delivery'),
   existingChapter('examples', 'evidence-reference', {
-    navTitle: 'Examples & Golden Run',
+    navTitle: 'React-атлас и практические сценарии',
     sections: [...existingChapterMap.examples.sections, goldenRunSection],
   }),
   additionalChapter('capstone-master-graph-certification'),
