@@ -79,6 +79,11 @@ import {
   upstreamResources,
 } from '@/lib/manual-data';
 import { withBasePath } from '@/lib/site-path';
+import { LanguageSwitch } from '@/components/language-switch';
+
+function withRuPath(path: string) {
+  return withBasePath(`/ru${path}`);
+}
 
 const statusCopy: Record<
   EvidenceStatus,
@@ -835,7 +840,7 @@ function SideNavigation({ activeSlug, chapter }: { activeSlug: string; chapter: 
   return (
     <Sidebar className="manual-sidebar" collapsible="offcanvas">
       <SidebarHeader className="manual-sidebar-header">
-        <a className="brand" href={withBasePath('/overview')}>
+        <a className="brand" href={withRuPath('/overview')}>
           <span className="brand-mark">EPS</span>
           <span className="brand-copy">
             <strong>EPSPOZICIYA ARCHVIZ</strong>
@@ -856,7 +861,7 @@ function SideNavigation({ activeSlug, chapter }: { activeSlug: string; chapter: 
                     <SidebarMenuButton
                       className="manual-menu-button"
                       isActive={item.slug === activeSlug}
-                      render={<a href={withBasePath(`/${item.slug}`)} aria-label={item.navTitle} />}
+                      render={<a href={withRuPath(`/${item.slug}`)} aria-label={item.navTitle} />}
                     >
                       <span className="menu-index">{String(item.index).padStart(2, '0')}</span>
                       <span>{item.navTitle}</span>
@@ -874,7 +879,7 @@ function SideNavigation({ activeSlug, chapter }: { activeSlug: string; chapter: 
           <span className="micro-label">SOURCE OF TRUTH</span>
           <strong>252 nodes · 341 links</strong>
           <p>Epspoziciya_archviz_ph_sdxlflux_v001.json</p>
-          <a href={withBasePath('/resources')}>
+          <a href={withRuPath('/resources')}>
             Исходные файлы <ArrowRight size={14} />
           </a>
         </div>
@@ -924,7 +929,7 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
         <header className="manual-topbar">
           <div className="topbar-left">
             <SidebarTrigger className="sidebar-trigger" />
-            <a className="mobile-brand" href={withBasePath('/overview')}><span>EPS</span> Technical Manual</a>
+            <a className="mobile-brand" href={withRuPath('/overview')}><span>EPS</span> Technical Manual</a>
           </div>
           <div className="topbar-progress" aria-label={`Раздел ${pageIndex + 1} из ${manualChapters.length}`}>
             <span>{String(pageIndex + 1).padStart(2, '0')} / {manualChapters.length}</span>
@@ -932,7 +937,8 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
           </div>
           <div className="topbar-actions">
             <PwaInstall />
-            <a className="topbar-resource-link" href={withBasePath('/resources')}><FileArchive size={16} /> Файлы</a>
+            <LanguageSwitch locale="ru" slug={chapter.slug} />
+            <a className="topbar-resource-link" href={withRuPath('/resources')}><FileArchive size={16} /> Файлы</a>
             <ThemeToggle />
           </div>
         </header>
@@ -941,9 +947,9 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
           <article className="manual-article">
             <Breadcrumb className="manual-breadcrumb">
               <BreadcrumbList>
-                <BreadcrumbItem><BreadcrumbLink render={<a href={withBasePath('/overview')} aria-label="Epspoziciya Archviz" />}>Epspoziciya Archviz</BreadcrumbLink></BreadcrumbItem>
+                <BreadcrumbItem><BreadcrumbLink render={<a href={withRuPath('/overview')} aria-label="Epspoziciya Archviz" />}>Epspoziciya Archviz</BreadcrumbLink></BreadcrumbItem>
                 <BreadcrumbSeparator />
-                <BreadcrumbItem><BreadcrumbLink render={<a href={withBasePath(`/${chapter.slug}`)} aria-label={categoryLabels[chapter.category]} />}>{categoryLabels[chapter.category]}</BreadcrumbLink></BreadcrumbItem>
+                <BreadcrumbItem><BreadcrumbLink render={<a href={withRuPath(`/${chapter.slug}`)} aria-label={categoryLabels[chapter.category]} />}>{categoryLabels[chapter.category]}</BreadcrumbLink></BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem><BreadcrumbPage>{chapter.navTitle}</BreadcrumbPage></BreadcrumbItem>
               </BreadcrumbList>
@@ -1003,18 +1009,18 @@ export function ManualPage({ chapter }: { chapter: Chapter }) {
 
             <nav className="chapter-navigation" aria-label="Переход между разделами">
               {previous ? (
-                <a className="chapter-nav-link previous" href={withBasePath(`/${previous.slug}`)}>
+                <a className="chapter-nav-link previous" href={withRuPath(`/${previous.slug}`)}>
                   <ArrowLeft />
                   <span><small>PREVIOUS</small><strong>{previous.navTitle}</strong></span>
                 </a>
               ) : <span />}
               {next ? (
-                <a className="chapter-nav-link next" href={withBasePath(`/${next.slug}`)}>
+                <a className="chapter-nav-link next" href={withRuPath(`/${next.slug}`)}>
                   <span><small>NEXT</small><strong>{next.navTitle}</strong></span>
                   <ArrowRight />
                 </a>
               ) : (
-                <a className="chapter-nav-link next" href={withBasePath('/overview')}>
+                <a className="chapter-nav-link next" href={withRuPath('/overview')}>
                   <span><small>BACK TO</small><strong>Overview</strong></span>
                   <Workflow />
                 </a>
