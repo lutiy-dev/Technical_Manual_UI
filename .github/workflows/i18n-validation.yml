@@ -1,0 +1,53 @@
+name: i18n validation
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-language-qc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Ensure English edition contains no Cyrillic UI/content
+        shell: bash
+        run: |
+          set -euo pipefail
+          targets=(
+            lib/manual-en
+            lib/manual-data-en.ts
+            lib/manual-existing-en-people.ts
+            lib/manual-existing-en-final.ts
+            components/manual-page-en.tsx
+            components/manual-visuals-en.tsx
+            components/full-graph-visuals-en.tsx
+            components/manual-node-index-en.tsx
+            components/pwa-install-en.tsx
+            components/tutor-bridge-en.tsx
+            app/page.tsx
+            'app/[slug]/page.tsx'
+            app/Technical_Manual_UI/page.tsx
+            'app/Technical_Manual_UI/[slug]/page.tsx'
+          )
+          if grep -R -n -P '[А-Яа-яЁё]' "${targets[@]}"; then
+            echo "English edition contains Cyrillic text."
+            exit 1
+          fi
+
+      - name: Build static application
+        run: npm run build
+
+      - name: Assemble GitHub Pages artifact
+        env:
+          NEXT_PUBLIC_BASE_PATH: /Technical_Manual_UI
+        run: node scripts/prepare-github-pages.mjs
