@@ -1,16 +1,18 @@
 {
-  "name": "EPSPOZICIYA ARCHVIZ · ComfyUI Technical Manual",
-  "short_name": "EPS Manual",
-  "description": "Фундаментальный учебник по ComfyUI для архитектурной визуализации: workflow engineering, Hansen graph, PEOPLE/PPL, ControlNet, FLUX и production practice.",
+  "name": "ARCHVIZ × AI · ComfyUI Technical Workflow Manual",
+  "short_name": "ArchViz AI Manual",
+  "description": "Production-focused ComfyUI manual for architectural visualization: workflow engineering, SDXL/FLUX, ControlNet, masks, PEOPLE/PPL, diagnostics and hands-on labs.",
   "id": "./",
-  "start_url": "./overview/",
+  "start_url": "./workflow-engineering-overview/",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["standalone"],
+  "display_override": [
+    "standalone"
+  ],
   "background_color": "#0b0d10",
   "theme_color": "#ffd400",
   "orientation": "any",
-  "lang": "ru",
+  "lang": "en",
   "dir": "ltr",
   "prefer_related_applications": false,
   "icons": [
@@ -35,8 +37,8 @@
   ],
   "shortcuts": [
     {
-      "name": "Начать обучение",
-      "short_name": "Старт",
+      "name": "Start learning",
+      "short_name": "Start",
       "url": "./workflow-engineering-overview/"
     },
     {
